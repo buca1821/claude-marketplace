@@ -15,7 +15,7 @@
     {
       "name": "ios-swift-skills",
       "version": "1.0.0",
-      "description": "Comprehensive iOS/SwiftUI knowledge base — 12 skills covering SwiftUI, concurrency, security, networking, TDD, performance, design system, CI/CD, App Store, and more",
+      "description": "Comprehensive iOS/SwiftUI knowledge base — 12 skills covering SwiftUI, concurrency, security, networking, testing, performance, design system, CI/CD, App Store, and more",
       "source": {
         "source": "local",
         "path": "./plugins/ios-swift-skills"
@@ -26,7 +26,7 @@
     {
       "name": "ios-audit-agents",
       "version": "1.0.0",
-      "description": "4 specialized iOS audit agents (architecture, code health, API freshness, UX/accessibility) with a unified /run-audits command",
+      "description": "4 specialized iOS audit agents (architecture, code health, API freshness, UX/accessibility) with /run-audits and /performance-audit commands",
       "source": {
         "source": "local",
         "path": "./plugins/ios-audit-agents"
@@ -35,15 +35,15 @@
       "keywords": ["ios", "audit", "agents", "code-quality"]
     },
     {
-      "name": "ios-tdd-commands",
+      "name": "implement-issue",
       "version": "1.0.0",
-      "description": "TDD workflow commands for iOS — red-green-refactor for features, reproduce-first bug fixes, and performance audits",
+      "description": "End-to-end GitHub issue implementation workflow — read issue, plan, implement, build, create PR, respond to reviews",
       "source": {
         "source": "local",
-        "path": "./plugins/ios-tdd-commands"
+        "path": "./plugins/implement-issue"
       },
       "author": "Luis Enrique Lopez",
-      "keywords": ["ios", "tdd", "testing", "commands"]
+      "keywords": ["github", "workflow", "issue", "pr"]
     },
     {
       "name": "ios-git-hooks",

@@ -1,0 +1,7 @@
+{
+  "name": "implement-issue",
+  "version": "1.0.0",
+  "description": "End-to-end GitHub issue implementation workflow — read issue, plan, implement, build, create PR, respond to reviews",
+  "author": { "name": "Luis Enrique Lopez" },
+  "keywords": ["github", "workflow", "issue", "pr"]
+}
