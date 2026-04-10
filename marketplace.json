@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0",
+  "plugins": [
+    {
+      "name": "claude-notifications-macos",
+      "version": "0.1.0",
+      "description": "macOS notifications when Claude needs your attention — fires on task completion and permission requests",
+      "source": {
+        "source": "local",
+        "path": "./plugins/claude-notifications-macos"
+      },
+      "author": "Tom Garretty",
+      "keywords": ["notifications", "macos"]
+    }
+  ]
+}

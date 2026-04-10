@@ -1,0 +1,9 @@
+{
+  "name": "claude-notifications-macos",
+  "version": "0.1.0",
+  "description": "macOS notifications when Claude needs your attention — fires on task completion and permission requests",
+  "author": {
+    "name": "Tom Garretty"
+  },
+  "keywords": ["experimental"]
+}
