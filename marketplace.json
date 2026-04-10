@@ -9,8 +9,52 @@
         "source": "local",
         "path": "./plugins/claude-notifications-macos"
       },
-      "author": "Tom Garretty",
+      "author": "Luis Enrique Lopez",
       "keywords": ["notifications", "macos"]
+    },
+    {
+      "name": "ios-swift-skills",
+      "version": "1.0.0",
+      "description": "Comprehensive iOS/SwiftUI knowledge base — 12 skills covering SwiftUI, concurrency, security, networking, TDD, performance, design system, CI/CD, App Store, and more",
+      "source": {
+        "source": "local",
+        "path": "./plugins/ios-swift-skills"
+      },
+      "author": "Luis Enrique Lopez",
+      "keywords": ["ios", "swift", "swiftui", "skills"]
+    },
+    {
+      "name": "ios-audit-agents",
+      "version": "1.0.0",
+      "description": "4 specialized iOS audit agents (architecture, code health, API freshness, UX/accessibility) with a unified /run-audits command",
+      "source": {
+        "source": "local",
+        "path": "./plugins/ios-audit-agents"
+      },
+      "author": "Luis Enrique Lopez",
+      "keywords": ["ios", "audit", "agents", "code-quality"]
+    },
+    {
+      "name": "ios-tdd-commands",
+      "version": "1.0.0",
+      "description": "TDD workflow commands for iOS — red-green-refactor for features, reproduce-first bug fixes, and performance audits",
+      "source": {
+        "source": "local",
+        "path": "./plugins/ios-tdd-commands"
+      },
+      "author": "Luis Enrique Lopez",
+      "keywords": ["ios", "tdd", "testing", "commands"]
+    },
+    {
+      "name": "ios-git-hooks",
+      "version": "1.0.0",
+      "description": "Git safety hooks for iOS projects — blocks commits to main and runs pre-commit quality checks on Swift files",
+      "source": {
+        "source": "local",
+        "path": "./plugins/ios-git-hooks"
+      },
+      "author": "Luis Enrique Lopez",
+      "keywords": ["ios", "git", "hooks", "quality"]
     }
   ]
 }

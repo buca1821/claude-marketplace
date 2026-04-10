@@ -1,0 +1,7 @@
+{
+  "name": "ios-audit-agents",
+  "version": "1.0.0",
+  "description": "4 specialized iOS audit agents (architecture, code health, API freshness, UX/accessibility) with a unified /run-audits command",
+  "author": { "name": "Luis Enrique Lopez" },
+  "keywords": ["ios", "audit", "agents", "code-quality"]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "ios-tdd-commands",
+  "version": "1.0.0",
+  "description": "TDD workflow commands for iOS — red-green-refactor for features, reproduce-first bug fixes, and performance audits",
+  "author": { "name": "Luis Enrique Lopez" },
+  "keywords": ["ios", "tdd", "testing", "commands"]
+}

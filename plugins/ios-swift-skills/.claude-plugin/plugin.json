@@ -1,0 +1,7 @@
+{
+  "name": "ios-swift-skills",
+  "version": "1.0.0",
+  "description": "Comprehensive iOS/SwiftUI knowledge base — 12 skills covering SwiftUI, concurrency, security, networking, TDD, performance, design system, CI/CD, App Store, and more",
+  "author": { "name": "Luis Enrique Lopez" },
+  "keywords": ["ios", "swift", "swiftui", "skills"]
+}

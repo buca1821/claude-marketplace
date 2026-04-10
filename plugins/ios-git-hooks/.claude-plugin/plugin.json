@@ -1,0 +1,7 @@
+{
+  "name": "ios-git-hooks",
+  "version": "1.0.0",
+  "description": "Git safety hooks for iOS projects — blocks commits to main and runs pre-commit quality checks on Swift files",
+  "author": { "name": "Luis Enrique Lopez" },
+  "keywords": ["ios", "git", "hooks", "quality"]
+}
