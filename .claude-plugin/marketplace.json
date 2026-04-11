@@ -1,5 +1,10 @@
 {
-  "version": "1.0.0",
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "claude-marketplace",
+  "description": "Personal Claude Code plugin marketplace — iOS development skills, audit agents, workflow commands, and git hooks",
+  "owner": {
+    "name": "Luis Enrique Lopez"
+  },
   "plugins": [
     {
       "name": "claude-notifications-macos",
