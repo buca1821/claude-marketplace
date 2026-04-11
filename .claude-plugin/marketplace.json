@@ -1,65 +1,50 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "claude-marketplace",
-  "description": "Personal Claude Code plugin marketplace — iOS development skills, audit agents, workflow commands, and git hooks",
+  "name": "buca1821-marketplace",
+  "description": "Personal plugin marketplace — iOS development skills, audit agents, workflow commands, and git hooks",
   "owner": {
     "name": "Luis Enrique Lopez"
   },
   "plugins": [
     {
       "name": "claude-notifications-macos",
-      "version": "0.1.0",
       "description": "macOS notifications when Claude needs your attention — fires on task completion and permission requests",
       "source": {
         "source": "local",
         "path": "./plugins/claude-notifications-macos"
-      },
-      "author": "Luis Enrique Lopez",
-      "keywords": ["notifications", "macos"]
+      }
     },
     {
       "name": "ios-swift-skills",
-      "version": "1.0.0",
       "description": "Comprehensive iOS/SwiftUI knowledge base — 12 skills covering SwiftUI, concurrency, security, networking, testing, performance, design system, CI/CD, App Store, and more",
       "source": {
         "source": "local",
         "path": "./plugins/ios-swift-skills"
-      },
-      "author": "Luis Enrique Lopez",
-      "keywords": ["ios", "swift", "swiftui", "skills"]
+      }
     },
     {
       "name": "ios-audit-agents",
-      "version": "1.0.0",
       "description": "4 specialized iOS audit agents (architecture, code health, API freshness, UX/accessibility) with /run-audits and /performance-audit commands",
       "source": {
         "source": "local",
         "path": "./plugins/ios-audit-agents"
-      },
-      "author": "Luis Enrique Lopez",
-      "keywords": ["ios", "audit", "agents", "code-quality"]
+      }
     },
     {
       "name": "implement-issue",
-      "version": "1.0.0",
       "description": "End-to-end GitHub issue implementation workflow — read issue, plan, implement, build, create PR, respond to reviews",
       "source": {
         "source": "local",
         "path": "./plugins/implement-issue"
-      },
-      "author": "Luis Enrique Lopez",
-      "keywords": ["github", "workflow", "issue", "pr"]
+      }
     },
     {
       "name": "ios-git-hooks",
-      "version": "1.0.0",
       "description": "Git safety hooks for iOS projects — blocks commits to main and runs pre-commit quality checks on Swift files",
       "source": {
         "source": "local",
         "path": "./plugins/ios-git-hooks"
-      },
-      "author": "Luis Enrique Lopez",
-      "keywords": ["ios", "git", "hooks", "quality"]
+      }
     }
   ]
 }
