@@ -9,57 +9,27 @@
     {
       "name": "claude-notifications-macos",
       "description": "macOS notifications when Claude needs your attention — fires on task completion and permission requests",
-      "source": {
-        "source": "git-subdir",
-        "url": "buca1821/claude-marketplace",
-        "path": "plugins/claude-notifications-macos",
-        "ref": "main",
-        "sha": "8d88bb8097d965678aca1ca67b692d6d0e71345f"
-      }
+      "source": "./plugins/claude-notifications-macos"
     },
     {
       "name": "ios-swift-skills",
       "description": "Comprehensive iOS/SwiftUI knowledge base — 12 skills covering SwiftUI, concurrency, security, networking, testing, performance, design system, CI/CD, App Store, and more",
-      "source": {
-        "source": "git-subdir",
-        "url": "buca1821/claude-marketplace",
-        "path": "plugins/ios-swift-skills",
-        "ref": "main",
-        "sha": "8d88bb8097d965678aca1ca67b692d6d0e71345f"
-      }
+      "source": "./plugins/ios-swift-skills"
     },
     {
       "name": "ios-audit-agents",
       "description": "4 specialized iOS audit agents (architecture, code health, API freshness, UX/accessibility) with /run-audits and /performance-audit commands",
-      "source": {
-        "source": "git-subdir",
-        "url": "buca1821/claude-marketplace",
-        "path": "plugins/ios-audit-agents",
-        "ref": "main",
-        "sha": "8d88bb8097d965678aca1ca67b692d6d0e71345f"
-      }
+      "source": "./plugins/ios-audit-agents"
     },
     {
       "name": "implement-issue",
       "description": "End-to-end GitHub issue implementation workflow — read issue, plan, implement, build, create PR, respond to reviews",
-      "source": {
-        "source": "git-subdir",
-        "url": "buca1821/claude-marketplace",
-        "path": "plugins/implement-issue",
-        "ref": "main",
-        "sha": "8d88bb8097d965678aca1ca67b692d6d0e71345f"
-      }
+      "source": "./plugins/implement-issue"
     },
     {
       "name": "ios-git-hooks",
       "description": "Git safety hooks for iOS projects — blocks commits to main and runs pre-commit quality checks on Swift files",
-      "source": {
-        "source": "git-subdir",
-        "url": "buca1821/claude-marketplace",
-        "path": "plugins/ios-git-hooks",
-        "ref": "main",
-        "sha": "8d88bb8097d965678aca1ca67b692d6d0e71345f"
-      }
+      "source": "./plugins/ios-git-hooks"
     }
   ]
 }
