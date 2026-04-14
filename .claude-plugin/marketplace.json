@@ -14,7 +14,7 @@
         "url": "buca1821/claude-marketplace",
         "path": "plugins/claude-notifications-macos",
         "ref": "main",
-        "sha": "e031d618e593fe71ff0cfe4ce196515eb1690bae"
+        "sha": "8d88bb8097d965678aca1ca67b692d6d0e71345f"
       }
     },
     {
@@ -25,7 +25,7 @@
         "url": "buca1821/claude-marketplace",
         "path": "plugins/ios-swift-skills",
         "ref": "main",
-        "sha": "e031d618e593fe71ff0cfe4ce196515eb1690bae"
+        "sha": "8d88bb8097d965678aca1ca67b692d6d0e71345f"
       }
     },
     {
@@ -36,7 +36,7 @@
         "url": "buca1821/claude-marketplace",
         "path": "plugins/ios-audit-agents",
         "ref": "main",
-        "sha": "e031d618e593fe71ff0cfe4ce196515eb1690bae"
+        "sha": "8d88bb8097d965678aca1ca67b692d6d0e71345f"
       }
     },
     {
@@ -47,7 +47,7 @@
         "url": "buca1821/claude-marketplace",
         "path": "plugins/implement-issue",
         "ref": "main",
-        "sha": "e031d618e593fe71ff0cfe4ce196515eb1690bae"
+        "sha": "8d88bb8097d965678aca1ca67b692d6d0e71345f"
       }
     },
     {
@@ -58,7 +58,7 @@
         "url": "buca1821/claude-marketplace",
         "path": "plugins/ios-git-hooks",
         "ref": "main",
-        "sha": "e031d618e593fe71ff0cfe4ce196515eb1690bae"
+        "sha": "8d88bb8097d965678aca1ca67b692d6d0e71345f"
       }
     }
   ]
