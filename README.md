@@ -4,26 +4,14 @@ Personal Claude Code plugin marketplace by [@buca1821](https://github.com/buca18
 
 ## Installation
 
-Add this marketplace to your `~/.claude/settings.json`:
-
-```json
-{
-  "extraKnownMarketplaces": {
-    "claude-marketplace": {
-      "source": {
-        "source": "git",
-        "url": "https://github.com/buca1821/claude-marketplace.git"
-      },
-      "autoUpdate": true
-    }
-  }
-}
+```bash
+claude plugin marketplace add buca1821/claude-marketplace
 ```
 
 Then install plugins with:
 
 ```bash
-claude plugin install <plugin-name>@claude-marketplace
+claude plugin install <plugin-name>@buca1821-marketplace
 ```
 
 ## Plugins
@@ -50,15 +38,16 @@ claude plugin install <plugin-name>@claude-marketplace
 
 ## Usage with claude-code-ios-template
 
-These plugins are designed to work with [claude-code-ios-template](https://github.com/buca1821/claude-code-ios-template). The template's `setup.sh` installs these plugins automatically and adds project-specific config (CLAUDE.md, rules, commands).
+These plugins are designed to work with [claude-code-ios-template](https://github.com/buca1821/claude-code-ios-template). The template's `setup.sh` registers the marketplace and installs these plugins automatically.
 
 ## Updating plugins
 
 ```bash
-claude plugin update ios-swift-skills@claude-marketplace
-claude plugin update ios-audit-agents@claude-marketplace
-claude plugin update ios-git-hooks@claude-marketplace
-claude plugin update implement-issue@claude-marketplace
+claude plugin update ios-swift-skills@buca1821-marketplace
+claude plugin update ios-audit-agents@buca1821-marketplace
+claude plugin update ios-git-hooks@buca1821-marketplace
+claude plugin update implement-issue@buca1821-marketplace
+claude plugin update claude-notifications-macos@buca1821-marketplace
 ```
 
 ## License
