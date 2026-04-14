@@ -4,16 +4,18 @@ Personal Claude Code plugin marketplace by [@buca1821](https://github.com/buca18
 
 ## Installation
 
-Register this marketplace in `~/.claude/plugins/known_marketplaces.json`:
+Add this marketplace to your `~/.claude/settings.json`:
 
 ```json
 {
-  "claude-marketplace": {
-    "source": {
-      "source": "github",
-      "repo": "buca1821/claude-marketplace"
-    },
-    "installLocation": "<your-home>/.claude/plugins/marketplaces/claude-marketplace"
+  "extraKnownMarketplaces": {
+    "claude-marketplace": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/buca1821/claude-marketplace.git"
+      },
+      "autoUpdate": true
+    }
   }
 }
 ```
