@@ -1,6 +1,18 @@
 {
-  "description": "Notify on Stop and PermissionRequest events",
+  "description": "Notify on Stop and PermissionRequest events, warn on missing dependencies at session start",
   "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "command -v terminal-notifier >/dev/null 2>&1 || echo 'claude-notifications-macos: terminal-notifier not found. Install with: brew install terminal-notifier'",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "matcher": "",
