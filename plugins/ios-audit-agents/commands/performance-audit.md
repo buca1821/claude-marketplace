@@ -1,6 +1,6 @@
 # performance-audit
 
-Audit SwiftUI performance for a specific view, feature, or the entire app.
+Ad-hoc SwiftUI performance review for a **specific** view, feature, or theme (scroll, launch, memory). Complements the bundled **`performance-auditor`** agent (quality dimension **3.14**), which emits full `AUDIT_OUTPUT_SPEC` runs under `.claude-marketplace-audits/`. Use this command for tight loops; use **`/run-audits`** with scope `performance` (or `full`) when you want the spec-aligned agent output.
 
 ## Input
 
