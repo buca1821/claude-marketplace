@@ -14,16 +14,17 @@ Run the **bundled** ios-audit-agents auditors in parallel for a codebase audit. 
 | `architecture-auditor` | 3.2, 3.3 |
 | `api-freshness-auditor` | 3.15 |
 | `ux-accessibility-auditor` | 3.12, 3.13 |
+| `performance-auditor` | 3.14 |
 
-There is **no** `performance-auditor` agent in this plugin bundle yet (dimension **3.14** remains `agent: performance-auditor` in the model). For ad-hoc performance heuristics, use **`/performance-audit`** with `$ARGUMENTS`.
+For a **narrow, view-scoped** performance pass (arguments like a single view name), **`/performance-audit`** is still useful alongside or instead of the full `performance-auditor` run.
 
 ## Input
 
-Scope: `$ARGUMENTS` (optional — `full`, `health`, `architecture`, `api`, `ux`, `cicd`, or empty for `full`)
+Scope: `$ARGUMENTS` (optional — `full`, `health`, `architecture`, `api`, `ux`, `performance`, `cicd`, or empty for `full`)
 
 ## Process
 
-### If scope is `full` or empty — run four agents in parallel
+### If scope is `full` or empty — run five agents in parallel
 
 Launch these agents **simultaneously** using the Agent tool:
 
@@ -31,6 +32,7 @@ Launch these agents **simultaneously** using the Agent tool:
 2. **architecture-auditor**
 3. **api-freshness-auditor**
 4. **ux-accessibility-auditor**
+5. **performance-auditor**
 
 For **`full` + CI/CD**, also execute the **`ci-cd-checklist` skill** (dimension **3.9**): treat the skill as the auditor — load `skills/ci-cd-checklist/SKILL.md`, run its checks, and emit the **same** paired `.md` + `.json` under `.claude-marketplace-audits/` (one additional timestamped pair).
 
@@ -42,6 +44,7 @@ For **`full` + CI/CD**, also execute the **`ci-cd-checklist` skill** (dimension 
 | `architecture` | `architecture-auditor` |
 | `api` | `api-freshness-auditor` |
 | `ux` | `ux-accessibility-auditor` |
+| `performance` | `performance-auditor` |
 | `cicd` | **`ci-cd-checklist` skill** only (dimension 3.9; paired audit output per `AUDIT_OUTPUT_SPEC.md`) |
 
 ### After agents complete
@@ -52,4 +55,4 @@ For **`full` + CI/CD**, also execute the **`ci-cd-checklist` skill** (dimension 
 
 ## Related
 
-- **Performance heuristics (not a bundled agent):** `/performance-audit` with `$ARGUMENTS`.
+- **Ad-hoc / scoped performance review:** `/performance-audit` with `$ARGUMENTS` (complements dimension **3.14**; does not replace Instruments when you need measured proof).
