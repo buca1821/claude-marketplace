@@ -1,7 +1,7 @@
 {
   "name": "ios-audit-agents",
-  "version": "1.0.0",
-  "description": "4 specialized iOS audit agents (architecture, code health, API freshness, UX/accessibility) with a unified /run-audits command",
+  "version": "1.3.3",
+  "description": "Four iOS audit agents + /run-audits + /performance-audit; QUALITY_FRAMEWORK (EN/ES), AI_RISK_CATALOG, AUDIT_OUTPUT_SPEC; skills quality-model, ai-risk-catalog, audit-output-format, ci-cd-checklist; paired Markdown+JSON under .claude-marketplace-audits/",
   "author": { "name": "Luis Enrique Lopez" },
   "keywords": ["ios", "audit", "agents", "code-quality"]
 }
