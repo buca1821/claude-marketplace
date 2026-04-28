@@ -248,7 +248,7 @@ Status legend for **Operationalized by**:
   not informational); signing and provisioning automated and documented;
   hotfix and rollback paths exist and have been exercised; release notes
   generated or curated.
-- **Operationalized by** — `skill: ci-cd-checklist`.
+- **Operationalized by** — `agent: ci-cd-auditor` (applies `skill: ci-cd-checklist`).
 - **Backing references** — ISO/IEC 25010:2023 — Maintainability, Flexibility.
 
 ### 3.10 Developer experience (DX)
@@ -516,7 +516,7 @@ Grouped by what they bring to this specification.
 | 3.6 | Security & privacy | `planned: security-privacy-auditor` |
 | 3.7 | Observability & telemetry | `planned: observability-auditor` |
 | 3.8 | Testing strategy | `planned: testing-strategy-auditor` |
-| 3.9 | CI/CD & release engineering | `skill: ci-cd-checklist` |
+| 3.9 | CI/CD & release engineering | `agent: ci-cd-auditor` (`skill: ci-cd-checklist`) |
 | 3.10 | Developer experience | `out-of-plugin-scope (manual)` |
 | 3.11 | Localization & i18n | `planned: localization-auditor` |
 | 3.12 | UX & UI quality | `agent: ux-accessibility-auditor` |

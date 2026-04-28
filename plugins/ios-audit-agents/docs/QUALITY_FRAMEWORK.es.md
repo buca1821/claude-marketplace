@@ -271,7 +271,7 @@ Leyenda de **Operativizado por**:
   (gates de merge, no informativos); firma y provisioning automatizados
   y documentados; rutas de hotfix y rollback existen y se han probado;
   notas de release generadas o curadas.
-- **Operativizado por** — `skill: ci-cd-checklist`.
+- **Operativizado por** — `agent: ci-cd-auditor` (aplica `skill: ci-cd-checklist`).
 - **Referencias de respaldo** — ISO/IEC 25010:2023 — Maintainability,
   Flexibility.
 
@@ -559,7 +559,7 @@ Agrupadas por lo que aportan a esta especificación.
 | 3.6 | Seguridad y privacidad | `planned: security-privacy-auditor` |
 | 3.7 | Observabilidad y telemetría | `planned: observability-auditor` |
 | 3.8 | Estrategia de testing | `planned: testing-strategy-auditor` |
-| 3.9 | CI/CD e ingeniería de release | `skill: ci-cd-checklist` |
+| 3.9 | CI/CD e ingeniería de release | `agent: ci-cd-auditor` (`skill: ci-cd-checklist`) |
 | 3.10 | Experiencia de desarrollo | `out-of-plugin-scope (manual)` |
 | 3.11 | Localización e i18n | `planned: localization-auditor` |
 | 3.12 | Calidad UX y UI | `agent: ux-accessibility-auditor` |

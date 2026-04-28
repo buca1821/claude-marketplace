@@ -41,7 +41,7 @@ This skill is the consultative lens over the plugin's quality model. It tells an
 | 3.6 | Security & privacy | `planned: security-privacy-auditor` |
 | 3.7 | Observability & telemetry | `planned: observability-auditor` |
 | 3.8 | Testing strategy | `planned: testing-strategy-auditor` |
-| 3.9 | CI/CD & release engineering | `skill: ci-cd-checklist` |
+| 3.9 | CI/CD & release engineering | `agent: ci-cd-auditor` (`skill: ci-cd-checklist`) |
 | 3.10 | Developer experience | `out-of-plugin-scope (manual)` |
 | 3.11 | Localization & i18n | `planned: localization-auditor` |
 | 3.12 | UX & UI quality | `agent: ux-accessibility-auditor` |

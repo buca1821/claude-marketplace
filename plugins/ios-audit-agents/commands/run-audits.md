@@ -4,7 +4,7 @@ Run the **bundled** ios-audit-agents auditors in parallel for a codebase audit. 
 
 **Quality model (dimensions, severities P0–P3, AI risks):** `docs/QUALITY_FRAMEWORK.md` — use **Section 2** for severity, **Section 3** for dimension definitions, **Section 7.2** for which agent/skill operationalizes each dimension.
 
-**Skills (consultative + CI):** `skills/quality-model`, `skills/ai-risk-catalog`, `skills/audit-output-format`, `skills/ci-cd-checklist` (invoke or read each `SKILL.md` before or during orchestration as needed).
+**Skills:** `skills/quality-model`, `skills/ai-risk-catalog`, `skills/audit-output-format` (consultative; each agent loads these per its prompt). Dimension **3.9** is executed by **`ci-cd-auditor`**, which in turn loads **`skills/ci-cd-checklist/SKILL.md`** — there is no separate “headless” CI run outside that agent.
 
 ## Bundled agents today
 
@@ -15,6 +15,7 @@ Run the **bundled** ios-audit-agents auditors in parallel for a codebase audit. 
 | `api-freshness-auditor` | 3.15 |
 | `ux-accessibility-auditor` | 3.12, 3.13 |
 | `performance-auditor` | 3.14 |
+| `ci-cd-auditor` | 3.9 (applies `ci-cd-checklist` skill) |
 
 For a **narrow, view-scoped** performance pass (arguments like a single view name), **`/performance-audit`** is still useful alongside or instead of the full `performance-auditor` run.
 
@@ -24,7 +25,7 @@ Scope: `$ARGUMENTS` (optional — `full`, `health`, `architecture`, `api`, `ux`,
 
 ## Process
 
-### If scope is `full` or empty — run five agents in parallel
+### If scope is `full` or empty — run six agents in parallel
 
 Launch these agents **simultaneously** using the Agent tool:
 
@@ -33,10 +34,9 @@ Launch these agents **simultaneously** using the Agent tool:
 3. **api-freshness-auditor**
 4. **ux-accessibility-auditor**
 5. **performance-auditor**
+6. **ci-cd-auditor**
 
-For **`full` + CI/CD**, also execute the **`ci-cd-checklist` skill** (dimension **3.9**): treat the skill as the auditor — load `skills/ci-cd-checklist/SKILL.md`, run its checks, and emit the **same** paired `.md` + `.json` under `.claude-marketplace-audits/` (one additional timestamped pair).
-
-### If scope is specific — run only that agent (or skill)
+### If scope is specific — run only that agent
 
 | Argument | Who runs |
 |----------|-----------|
@@ -45,7 +45,7 @@ For **`full` + CI/CD**, also execute the **`ci-cd-checklist` skill** (dimension 
 | `api` | `api-freshness-auditor` |
 | `ux` | `ux-accessibility-auditor` |
 | `performance` | `performance-auditor` |
-| `cicd` | **`ci-cd-checklist` skill** only (dimension 3.9; paired audit output per `AUDIT_OUTPUT_SPEC.md`) |
+| `cicd` | `ci-cd-auditor` |
 
 ### After agents complete
 

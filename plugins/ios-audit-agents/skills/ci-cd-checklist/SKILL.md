@@ -1,11 +1,11 @@
 ---
 name: ci-cd-checklist
-description: Operational checklist that audits dimension 3.9 (CI/CD & release engineering) of the ios-audit-agents quality model — pipelines, merge gates, signing, environments, rollouts, release notes, hotfix path and branch protection — and emits findings conforming to the audit output spec. Use when an audit covers CI/CD without a dedicated agent. Looks at GitHub Actions, GitLab CI, Bitrise, Xcode Cloud and Fastlane configurations, plus repository hosting settings (branch protection rules). Pairs with the quality-model, ai-risk-catalog and audit-output-format skills.
+description: Operational checklist that audits dimension 3.9 (CI/CD & release engineering) of the ios-audit-agents quality model — pipelines, merge gates, signing, environments, rollouts, release notes, hotfix path and branch protection — and emits findings conforming to the audit output spec. **Executed by the `ci-cd-auditor` agent** in the plugin bundle (read this `SKILL.md` in full each run); may also be read standalone for reference. Looks at GitHub Actions, GitLab CI, Bitrise, Xcode Cloud and Fastlane configurations, plus repository hosting settings (branch protection rules). Pairs with the quality-model, ai-risk-catalog and audit-output-format skills.
 ---
 
 # CI/CD checklist — dimension 3.9
 
-This skill is the operational lens for auditing **dimension 3.9 — CI/CD & release engineering** of the quality model. Unlike the consultative skills (`quality-model`, `ai-risk-catalog`, `audit-output-format`), this one runs the checks and emits findings. Every finding produced by this skill carries `dimension: "3.9"`.
+This skill is the operational lens for auditing **dimension 3.9 — CI/CD & release engineering** of the quality model. In the plugin bundle, the **`ci-cd-auditor`** agent loads this file and performs the checks. Unlike the consultative skills (`quality-model`, `ai-risk-catalog`, `audit-output-format`), this checklist **runs** the checks and emits findings. Every finding produced when applying this skill carries `dimension: "3.9"`.
 
 The canonical sources are:
 
