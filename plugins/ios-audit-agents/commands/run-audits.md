@@ -50,7 +50,7 @@ Launch these agents **simultaneously** using the Agent tool:
 ### After agents complete
 
 1. **Discover outputs** — List the newest files in `<repo>/.claude-marketplace-audits/` matching `*__*.json` (and their `.md` siblings). Each agent run should add **one** timestamped pair.
-2. **Optional unified summary** — If the user wants a single Markdown digest, read the JSON files and produce one executive summary (counts by severity, top `ai_risk_id` values, dimensions covered). Do **not** delete per-agent JSON; the JSON is the canonical telemetry.
+2. **Optional unified summary** — If the user wants a single Markdown digest, read the JSON files and produce one executive summary (counts by severity, top `ai_risk_id` values, dimensions covered). For **machine-side merge** recipes (`jq`, concatenating `findings`), see **`docs/MERGE_AUDITS.md`**. Do **not** delete per-agent JSON; the JSON is the canonical telemetry.
 3. **Escalation** — If any **P0–P1** findings exist, suggest filing issues or blocking the release until addressed.
 
 ## Related
