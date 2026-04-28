@@ -165,7 +165,7 @@ consumen el JSON, nunca el Markdown.
   "scope": {
     "dimensions_audited": ["3.2", "3.12", "3.15"],
     "agents_used": ["architecture-auditor", "ux-accessibility-auditor", "api-freshness-auditor"],
-    "skills_used": ["framework", "ai-risk-catalog"]
+    "skills_used": ["quality-model", "ai-risk-catalog"]
   },
   "findings": [],
   "metrics": {
@@ -381,7 +381,7 @@ calidad.
   "scope": {
     "dimensions_audited": ["3.15"],
     "agents_used": ["api-freshness-auditor"],
-    "skills_used": ["framework"]
+    "skills_used": ["quality-model"]
   },
   "findings": [],
   "metrics": {
@@ -416,7 +416,7 @@ calidad.
   "scope": {
     "dimensions_audited": ["3.15"],
     "agents_used": ["api-freshness-auditor"],
-    "skills_used": ["framework", "ai-risk-catalog"]
+    "skills_used": ["quality-model", "ai-risk-catalog"]
   },
   "findings": [
     {

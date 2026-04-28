@@ -160,7 +160,7 @@ the JSON, never the Markdown.
   "scope": {
     "dimensions_audited": ["3.2", "3.12", "3.15"],
     "agents_used": ["architecture-auditor", "ux-accessibility-auditor", "api-freshness-auditor"],
-    "skills_used": ["framework", "ai-risk-catalog"]
+    "skills_used": ["quality-model", "ai-risk-catalog"]
   },
   "findings": [],
   "metrics": {
@@ -369,7 +369,7 @@ These are the inputs that feed Section 7.3 of the quality model.
   "scope": {
     "dimensions_audited": ["3.15"],
     "agents_used": ["api-freshness-auditor"],
-    "skills_used": ["framework"]
+    "skills_used": ["quality-model"]
   },
   "findings": [],
   "metrics": {
@@ -404,7 +404,7 @@ These are the inputs that feed Section 7.3 of the quality model.
   "scope": {
     "dimensions_audited": ["3.15"],
     "agents_used": ["api-freshness-auditor"],
-    "skills_used": ["framework", "ai-risk-catalog"]
+    "skills_used": ["quality-model", "ai-risk-catalog"]
   },
   "findings": [
     {
