@@ -37,8 +37,8 @@ Procedural guidance for build, test, and QA workflows using XcodeBuildMCP.
 - After launch, use `screenshot` to verify visual state.
 
 ### UI Inspection
-- Always use `describe_ui` before interacting to get precise coordinates.
-- Use `tap` / `swipe` / `type_text` based on `describe_ui` output.
+- Always use `snapshot_ui` before interacting to get precise coordinates.
+- Use `tap` / `swipe` / `type_text` based on `snapshot_ui` output.
 - Use `screenshot` after actions for visual verification.
 
 ## Important Notes
