@@ -33,9 +33,42 @@
 
 ### Code signing errors
 
-**Cause**: CI doesn't have signing certificates.
+For Test and Build jobs (no archive needed), the simplest fix is to disable signing entirely:
 
-**Fix**: Always use `CODE_SIGNING_ALLOWED=NO` for CI builds. Signing is only needed for archive/distribution.
+```bash
+xcodebuild build -configuration Debug CODE_SIGNING_ALLOWED=NO
+```
+
+For Archive and Distribute jobs, signing must succeed — see `code-signing.md` for the full setup. The most common archive-time failures and their fixes:
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `No signing certificate "iOS Distribution" found` | Cert not imported, wrong keychain, or keychain locked | Verify `security find-identity -v` shows the cert in the active keychain. Run `security unlock-keychain` and `security set-key-partition-list` |
+| `User interaction is not allowed` | Keychain partition list not set; `codesign` prompts non-interactively | Run `security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k <password>` after import |
+| `Provisioning profile doesn't include the currently signed device` | Distribution profile doesn't match build destination, or you're using a Development profile | Use `-destination 'generic/platform=iOS'` for archives. Confirm the profile is "Distribution" not "Development" |
+| `Provisioning profile doesn't match the entitlements` | Profile is for a different bundle ID, or app added a capability the profile doesn't include | Regenerate the profile in Apple Developer portal after capability changes |
+| `Could not locate installed application` | Wrong destination — building for a specific simulator that doesn't exist on the runner | Use `generic/platform=iOS` for archives, not a Simulator destination |
+| `iCloud entitlement missing` | Capability added in Xcode, profile not regenerated | Profile must be regenerated whenever entitlements change |
+| `errSecAuthFailed` (-25293) during import | Wrong `.p12` password | Verify `DISTRIBUTION_CERT_PASSWORD` matches the password set during export |
+
+**Debug routine** for signing failures:
+
+```bash
+# 1. List identities visible to codesign
+security find-identity -v -p codesigning
+
+# 2. List provisioning profiles installed
+ls -la "$HOME/Library/MobileDevice/Provisioning Profiles/"
+
+# 3. Show the profile's bundle ID and team
+security cms -D -i "$HOME/Library/MobileDevice/Provisioning Profiles/profile.mobileprovision" \
+    | plutil -extract Entitlements xml1 -o - -
+
+# 4. Confirm Xcode picked the right profile
+xcodebuild archive ... 2>&1 | grep -i "provision\|sign"
+```
+
+If the identity is missing from step 1, the cert was never imported into the active keychain or the keychain is wrong (see `security list-keychains -d user`). If the profile in step 2 is missing or has the wrong bundle ID, the per-run setup script didn't install it correctly. Step 4 confirms which provisioning profile `xcodebuild` actually selected.
 
 ### Build succeeds locally but fails on CI
 

@@ -1,4 +1,8 @@
-# GitHub Actions for iOS
+# GitHub Actions — iOS Implementation Example
+
+This file shows a working GitHub Actions setup for the canonical iOS pipeline. It is one possible implementation of the platform-agnostic guidance in `pipeline-jobs.md`, `branch-protection.md`, and `release-pipeline.md`. Translate the same job structure to Xcode Cloud, GitLab CI, or Bitrise as needed — the YAML changes; the gates and jobs do not.
+
+For the conceptual model (which jobs, which order, what they verify), read those reference files first. The YAML below is mechanical glue.
 
 ## Standard CI Workflow
 
