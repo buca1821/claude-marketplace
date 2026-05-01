@@ -120,9 +120,10 @@ The order is also a dependency chain: Test depends on Lint passing (lint is so c
 **Purpose:** Upload the archive somewhere users (or testers) can install it.
 
 **Tools:**
-- TestFlight: `xcrun altool --upload-app` or `xcrun notarytool` for macOS, increasingly via the App Store Connect API directly.
+- TestFlight / App Store (iOS and macOS): `xcrun altool --upload-app`, or the App Store Connect API directly.
+- Notarization (macOS apps distributed outside the App Store): `xcrun notarytool submit` followed by `xcrun stapler staple`. Notarization is unrelated to TestFlight — don't conflate them.
 - Ad-hoc: `xcodebuild -exportArchive -exportOptionsPlist`.
-- App Store: TestFlight first, then promote via App Store Connect.
+- App Store submission: TestFlight first, then promote via App Store Connect.
 
 **Runs on:** macOS runner with App Store Connect API key configured.
 

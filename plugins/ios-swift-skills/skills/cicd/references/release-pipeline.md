@@ -125,15 +125,18 @@ xcodebuild archive \
     -scheme YourApp \
     -configuration Release \
     -archivePath build/YourApp.xcarchive \
-    -allowProvisioningUpdates \
+    -destination 'generic/platform=iOS' \
     DEVELOPMENT_TEAM=ABCDE12345 \
-    -destination 'generic/platform=iOS'
+    CODE_SIGN_STYLE=Manual \
+    PROVISIONING_PROFILE_SPECIFIER="YourApp App Store"
 
 xcodebuild -exportArchive \
     -archivePath build/YourApp.xcarchive \
     -exportPath build/export \
     -exportOptionsPlist scripts/ExportOptions.plist
 ```
+
+**Do not pass `-allowProvisioningUpdates` in CI.** That flag tells Xcode it may contact Apple's portal to update the profile, which requires an interactive Apple ID login and fails non-interactively on a runner. With manual signing pre-configured per `code-signing.md`, the cert and profile are already imported — Xcode does not need to update anything. The explicit `CODE_SIGN_STYLE=Manual` and `PROVISIONING_PROFILE_SPECIFIER` make this unambiguous and match the example in `code-signing.md`.
 
 `ExportOptions.plist` describes the distribution method:
 

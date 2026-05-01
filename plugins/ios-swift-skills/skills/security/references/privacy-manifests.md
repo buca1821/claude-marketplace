@@ -124,16 +124,14 @@ Five categories, each with its own list of valid reason codes:
 
 ### `NSPrivacyAccessedAPICategoryUserDefaults`
 
-Every app calls `UserDefaults` somewhere. Reasons:
+Every app calls `UserDefaults` somewhere. The current valid reason codes are:
 
-| Code | Description |
-|---|---|
-| `CA92.1` | Read/write to your own app's UserDefaults |
-| `1C8F.1` | Reading values from other apps in your app group |
-| `C56D.1` | Reading values written by your app's extensions |
-| `AC6B.1` | App-managed device identifiers (only for some specific cases — read the docs first) |
+- **`CA92.1`** — UserDefaults values that are accessible only to the app itself.
+- **`1C8F.1`** — UserDefaults values shared between the app, its app extensions, and App Clips that belong to the same App Group.
+- **`C56D.1`** — UserDefaults values shared between the app and other apps owned by the same developer (e.g., a parent app and a companion macOS app).
+- **`AC6B.1`** — UserDefaults values shared between the app and an App Clip from the same app.
 
-For 99% of apps, declare `CA92.1`. If you use app groups (extension or widget sharing UserDefaults), add the relevant code.
+For 99% of apps, declare `CA92.1`. Add others only when the corresponding sharing relationship actually applies. Always cross-check the exact wording against Apple's Required Reason API documentation before submitting — Apple updates the descriptions and occasionally adds new codes.
 
 ### `NSPrivacyAccessedAPICategoryFileTimestamp`
 
