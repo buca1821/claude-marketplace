@@ -26,7 +26,7 @@ Print the current branch first and use it in the report header — do not rely o
 
 Read each modified file with the Read tool for full context. If there are more than 15 files, prioritize those with the most changes.
 
-**Distinguish "added in this PR" from "modified file that contains the line".** The aggregated `git diff $BASE...HEAD` shows everything the branch carries, but a line you see there may have already existed on `main` before this PR — the diff just shows it because the file was touched. Before reporting a line as "new in this PR" (especially for "unused / dead / placeholder" findings), verify with:
+**Distinguish "added in this PR" from "pre-existing code".** The `git diff $BASE...HEAD` output is authoritative for *what changed*, but the `Read` step loads each modified file in full — so the context you have for any given file mixes new lines (in the diff hunks) with pre-existing lines (unchanged). Only flag issues for lines that actually live inside a diff hunk for this PR. If you are unsure whether a specific line is new (especially for "unused / dead / placeholder" findings), verify with:
 
 ```bash
 git log -p $BASE_BRANCH..HEAD -- <file>   # commits in this PR that touch the file
@@ -83,7 +83,6 @@ If they answer, demote anything covered by that context from `Minor` issue to `P
 **View composition**
 - Multiple top-level type definitions in a single file — each type should have its own file.
 - Excessively long `body` properties — break into extracted subviews.
-- Computed properties or methods returning `some View`. **Caveat:** with `@Observable`, change propagation tracks the specific keyPaths read inside a view, not struct identity. In small files this refactor does not reduce re-evaluations and is mostly stylistic — list as `Minor` (or skip) unless the file is large, the `body` is deeply nested, or the same computed property is re-evaluated across many state changes that only some of its subtrees care about.
 
 **Accessibility**
 - `onTapGesture` where `Button` should be used (VoiceOver cannot detect tap gestures).
@@ -114,6 +113,9 @@ If they answer, demote anything covered by that context from `Minor` issue to `P
 ---
 
 ### Minor
+
+**View composition (stylistic)**
+- Computed properties or methods returning `some View`. With `@Observable`, change propagation tracks the specific keyPaths read inside a view, not struct identity, so extracting to dedicated `View` structs does not reduce re-evaluations in small files. Promote to `Medium` only if the file is large, the `body` is deeply nested, or the same computed property is re-evaluated across many state changes that only some of its subtrees care about — otherwise list as `Minor` or skip.
 
 **Dead code**
 - Unused methods, properties, types, or protocol conformances after refactoring.
