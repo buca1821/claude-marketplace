@@ -12,12 +12,34 @@ Review code on the current branch, detecting common problems before opening a PR
 ```bash
 BASE_BRANCH=$(git remote show origin 2>/dev/null | grep 'HEAD branch' | awk '{print $NF}')
 [ -z "$BASE_BRANCH" ] && BASE_BRANCH="main"
-echo "Base branch: $BASE_BRANCH"
+CURRENT_BRANCH=$(git branch --show-current)
+echo "Current branch: $CURRENT_BRANCH"
+echo "Base branch:    $BASE_BRANCH"
+echo "---"
+git log --oneline $BASE_BRANCH..HEAD
+echo "---"
 git diff $BASE_BRANCH...HEAD --name-only --diff-filter=ACMR
 git diff $BASE_BRANCH...HEAD
 ```
 
+Print the current branch first and use it in the report header — do not rely on any branch name from earlier in the conversation, snapshot, or system context, since those may be stale if the user switched branches mid-session.
+
 Read each modified file with the Read tool for full context. If there are more than 15 files, prioritize those with the most changes.
+
+**Distinguish "added in this PR" from "pre-existing code".** The `git diff $BASE...HEAD` output is authoritative for *what changed*, but the `Read` step loads each modified file in full — so the context you have for any given file mixes new lines (in the diff hunks) with pre-existing lines (unchanged). Only flag issues for lines that actually live inside a diff hunk for this PR. If you are unsure whether a specific line is new (especially for "unused / dead / placeholder" findings), verify with:
+
+```bash
+git log -p $BASE_BRANCH..HEAD -- <file>   # commits in this PR that touch the file
+git blame -L <start>,<end> -- <file>      # who added the specific line
+```
+
+**Distinguish branch-naming mismatch from scope mixing.** A branch named `chore/foo` that contains feature commits is a naming smell, resolvable by renaming or by an explicit PR-description note. It is **not** the same as a PR mixing scopes. Confirm scope mixing only by inspecting the actual commits (`git log --oneline $BASE..HEAD` plus the paths each one touches) — never by branch name alone.
+
+### Step 1b — Optional scope context
+
+Before listing minor issues, optionally ask the user: *"Is there a plan, spec, or scope context for this PR I should know about (e.g. things that are intentional placeholders, deferred to a later PR, or already covered by an earlier merge)?"*
+
+If they answer, demote anything covered by that context from `Minor` issue to `PR Reminders` (or drop it entirely). Typical examples worth flagging as *signals of scope* rather than defects: stub destinations (`Text(verbatim: "Detail #...")`), single-device snapshot coverage, loose snapshot precision, unused localization keys that a later PR will consume. If you have no scope context and the placeholder looks deliberate, prefer asking over listing as a Minor issue.
 
 ## Step 2: Apply checks
 
@@ -59,7 +81,6 @@ Read each modified file with the Read tool for full context. If there are more t
 - Common offenders: `foregroundColor` -> `foregroundStyle`, `.cornerRadius` -> `.clipShape`, `.animation()` without `value:`.
 
 **View composition**
-- Computed properties or methods returning `some View` — extract to separate `View` structs.
 - Multiple top-level type definitions in a single file — each type should have its own file.
 - Excessively long `body` properties — break into extracted subviews.
 
@@ -92,6 +113,9 @@ Read each modified file with the Read tool for full context. If there are more t
 ---
 
 ### Minor
+
+**View composition (stylistic)**
+- Computed properties or methods returning `some View`. With `@Observable`, change propagation tracks the specific keyPaths read inside a view, not struct identity, so extracting to dedicated `View` structs does not reduce re-evaluations in small files. Promote to `Medium` only if the file is large, the `body` is deeply nested, or the same computed property is re-evaluated across many state changes that only some of its subtrees care about — otherwise list as `Minor` or skip.
 
 **Dead code**
 - Unused methods, properties, types, or protocol conformances after refactoring.
