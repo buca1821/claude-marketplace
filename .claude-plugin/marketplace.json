@@ -18,7 +18,7 @@
     },
     {
       "name": "ios-audit-agents",
-      "description": "4 specialized iOS audit agents (architecture, code health, API freshness, UX/accessibility) with /run-audits and /performance-audit commands",
+      "description": "6 specialized iOS audit agents (architecture, code health, API freshness, UX/accessibility, performance, CI/CD) with /run-audits and /performance-audit commands",
       "source": "./plugins/ios-audit-agents"
     },
     {
