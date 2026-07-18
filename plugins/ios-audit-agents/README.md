@@ -1,6 +1,6 @@
 # ios-audit-agents
 
-Claude Code plugin: **six auditors**, **`/run-audits`**, and **`/performance-audit`**, backed by a versioned **quality model**, **AI risk catalog**, and **audit output spec** (Markdown + JSON under `.claude-marketplace-audits/` in the audited repo).
+Claude Code plugin: **seven auditors**, **`/run-audits`**, and **`/performance-audit`**, backed by a versioned **quality model**, **AI risk catalog**, and **audit output spec** (Markdown + JSON under `.claude-marketplace-audits/` in the audited repo).
 
 ## Agents
 
@@ -12,10 +12,11 @@ Claude Code plugin: **six auditors**, **`/run-audits`**, and **`/performance-aud
 | `ux-accessibility-auditor` | 3.12, 3.13 |
 | `performance-auditor` | 3.14 |
 | `ci-cd-auditor` | 3.9 (loads `skills/ci-cd-checklist/SKILL.md`) |
+| `security-privacy-auditor` | 3.6 |
 
 ## Commands
 
-- **`/run-audits`** — Launches agents in parallel (`full` = all six). See `commands/run-audits.md`.
+- **`/run-audits`** — Launches agents in parallel (`full` = all seven). See `commands/run-audits.md`.
 - **`/performance-audit`** — Scoped SwiftUI performance pass; complements `performance-auditor`. See `commands/performance-audit.md`.
 
 ## Skills

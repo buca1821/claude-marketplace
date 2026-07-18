@@ -124,5 +124,5 @@ Reports and JSON string fields: **American English**.
 - **3.12 / 3.13** — `ux-accessibility-auditor`
 - **3.14** — `performance-auditor`
 - **3.5** full reliability policy — `planned: reliability-auditor`
-- **3.6** — `planned: security-privacy-auditor`
+- **3.6** — `security-privacy-auditor`
 - **3.7** full observability — `planned: observability-auditor` (you may only flag `print` as 3.16 hygiene)

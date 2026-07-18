@@ -205,7 +205,7 @@ Status legend for **Operationalized by**:
   source; no global ATS exceptions; privacy manifest present and accurate;
   tracking domains declared; analytics events reviewed for PII;
   permissions requested in context with clear purpose strings.
-- **Operationalized by** — `planned: security-privacy-auditor`.
+- **Operationalized by** — `agent: security-privacy-auditor`.
 - **Backing references** — OWASP MASVS v2.1 (STORAGE, CRYPTO, AUTH,
   NETWORK, PLATFORM, PRIVACY); Apple App Review Guidelines (Safety, Legal);
   ISO/IEC 25010:2023 — Security.
@@ -513,7 +513,7 @@ Grouped by what they bring to this specification.
 | 3.3 | Domain model integrity | `agent: architecture-auditor` (extension) |
 | 3.4 | State, concurrency & data races | `planned: concurrency-auditor`, partially `agent: code-health-auditor` |
 | 3.5 | Reliability & error handling | `planned: reliability-auditor` |
-| 3.6 | Security & privacy | `planned: security-privacy-auditor` |
+| 3.6 | Security & privacy | `agent: security-privacy-auditor` |
 | 3.7 | Observability & telemetry | `planned: observability-auditor` |
 | 3.8 | Testing strategy | `planned: testing-strategy-auditor` |
 | 3.9 | CI/CD & release engineering | `agent: ci-cd-auditor` (`skill: ci-cd-checklist`) |

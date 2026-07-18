@@ -225,7 +225,7 @@ Leyenda de **Operativizado por**:
   presente y exacto; dominios de tracking declarados; eventos de
   analítica revisados para PII; permisos pedidos en contexto con
   propósito claro.
-- **Operativizado por** — `planned: security-privacy-auditor`.
+- **Operativizado por** — `agent: security-privacy-auditor`.
 - **Referencias de respaldo** — OWASP MASVS v2.1 (STORAGE, CRYPTO,
   AUTH, NETWORK, PLATFORM, PRIVACY); Apple App Review Guidelines
   (Safety, Legal); ISO/IEC 25010:2023 — Security.
@@ -556,7 +556,7 @@ Agrupadas por lo que aportan a esta especificación.
 | 3.3 | Integridad del modelo de dominio | `agent: architecture-auditor` (extensión) |
 | 3.4 | Estado, concurrencia y data races | `planned: concurrency-auditor`, parcialmente `agent: code-health-auditor` |
 | 3.5 | Fiabilidad y manejo de errores | `planned: reliability-auditor` |
-| 3.6 | Seguridad y privacidad | `planned: security-privacy-auditor` |
+| 3.6 | Seguridad y privacidad | `agent: security-privacy-auditor` |
 | 3.7 | Observabilidad y telemetría | `planned: observability-auditor` |
 | 3.8 | Estrategia de testing | `planned: testing-strategy-auditor` |
 | 3.9 | CI/CD e ingeniería de release | `agent: ci-cd-auditor` (`skill: ci-cd-checklist`) |

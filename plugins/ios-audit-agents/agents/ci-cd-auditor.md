@@ -42,7 +42,7 @@ Identical to other auditors:
 
 - **3.14** runner cost / Instruments — `performance-auditor`
 - **3.8** test design quality — `planned: testing-strategy-auditor` (you only check that tests **run** and are **gated** where applicable)
-- **3.6** deep secret handling — `planned: security-privacy-auditor` (C14 stays 3.9 per skill)
+- **3.6** deep secret handling — `security-privacy-auditor` (C14 stays 3.9 per skill)
 
 ## Language
 

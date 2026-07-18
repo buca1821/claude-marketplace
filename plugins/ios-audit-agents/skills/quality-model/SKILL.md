@@ -38,7 +38,7 @@ This skill is the consultative lens over the plugin's quality model. It tells an
 | 3.3 | Domain model integrity | `agent: architecture-auditor` (extension) |
 | 3.4 | State, concurrency & data races | `planned: concurrency-auditor`, partially `agent: code-health-auditor` |
 | 3.5 | Reliability & error handling | `planned: reliability-auditor` |
-| 3.6 | Security & privacy | `planned: security-privacy-auditor` |
+| 3.6 | Security & privacy | `agent: security-privacy-auditor` |
 | 3.7 | Observability & telemetry | `planned: observability-auditor` |
 | 3.8 | Testing strategy | `planned: testing-strategy-auditor` |
 | 3.9 | CI/CD & release engineering | `agent: ci-cd-auditor` (`skill: ci-cd-checklist`) |

@@ -16,16 +16,17 @@ Run the **bundled** ios-audit-agents auditors in parallel for a codebase audit. 
 | `ux-accessibility-auditor` | 3.12, 3.13 |
 | `performance-auditor` | 3.14 |
 | `ci-cd-auditor` | 3.9 (applies `ci-cd-checklist` skill) |
+| `security-privacy-auditor` | 3.6 |
 
 For a **narrow, view-scoped** performance pass (arguments like a single view name), **`/performance-audit`** is still useful alongside or instead of the full `performance-auditor` run.
 
 ## Input
 
-Scope: `$ARGUMENTS` (optional — `full`, `health`, `architecture`, `api`, `ux`, `performance`, `cicd`, or empty for `full`)
+Scope: `$ARGUMENTS` (optional — `full`, `health`, `architecture`, `api`, `ux`, `performance`, `cicd`, `security`, or empty for `full`)
 
 ## Process
 
-### If scope is `full` or empty — run six agents in parallel
+### If scope is `full` or empty — run seven agents in parallel
 
 Launch these agents **simultaneously** using the Agent tool:
 
@@ -35,6 +36,7 @@ Launch these agents **simultaneously** using the Agent tool:
 4. **ux-accessibility-auditor**
 5. **performance-auditor**
 6. **ci-cd-auditor**
+7. **security-privacy-auditor**
 
 ### If scope is specific — run only that agent
 
@@ -46,6 +48,7 @@ Launch these agents **simultaneously** using the Agent tool:
 | `ux` | `ux-accessibility-auditor` |
 | `performance` | `performance-auditor` |
 | `cicd` | `ci-cd-auditor` |
+| `security` | `security-privacy-auditor` |
 
 ### After agents complete
 
