@@ -118,7 +118,7 @@ If they answer, demote anything covered by that context from `Minor` issue to `P
 - Computed properties or methods returning `some View`. With `@Observable`, change propagation tracks specific keyPaths read inside a view, not struct identity, so extracting to dedicated `View` structs does not reduce re-evaluations in small files. Promote to `Medium` only when at least one of the following applies:
   - (a) the subview owns its own `@State` that must survive parent rebuilds;
   - (b) the same subview is reused in more than one place;
-  - (c) the body is hard to read (deep nesting, or roughly 30+ lines for a single subview);
+  - (c) the body is hard to read (deep nesting, or roughly 40+ lines for a single subview);
   - (d) the file is large enough that explicit `View` struct boundaries materially help navigation.
 
   Otherwise list as `Minor` or skip. This mirrors the Apple guidance (composition is free; identity is structural) and Paul Hudson's rule of thumb ("extract when your code becomes hard to read, not to chase performance").
