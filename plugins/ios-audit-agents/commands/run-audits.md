@@ -50,8 +50,6 @@ Never stash, commit, reset or check out on the user's behalf.
 
 ### 2. Launch the agents
 
-Give each agent the same prompt: `Audit the repository at <root> (commit <sha>) for your dimensions. Follow your mandatory prelude.`
-
 **If scope is `full` or empty**, launch these seven agents **simultaneously** with the Agent tool, using their full names:
 
 1. `ios-audit-agents:code-health-auditor`
@@ -74,16 +72,32 @@ Give each agent the same prompt: `Audit the repository at <root> (commit <sha>) 
 | `cicd` | `ios-audit-agents:ci-cd-auditor` |
 | `security` | `ios-audit-agents:security-privacy-auditor` |
 
-### 3. Validate the outputs
-
-Each agent validates its own pair before it finishes (`audit-run-protocol` §7). Validate again here, because an agent can stop before its last step. The new files are those absent from the listing kept in step 1:
+Before launching, give each agent that will run its own stem and working directory (`audit-run-protocol` §7.1). Create them in one Bash call. Replace `<base>` with your scratchpad directory when your environment names one, else `${TMPDIR:-/tmp}`. Replace `<agents>` with the names of the agents that will run, without the plugin prefix: all seven for `full`, one for a specific scope.
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/scripts/validate-audit.py" <repo>/.claude-marketplace-audits/<new-stem>.json ...
+run="$(mktemp -d "<base>/ios-audit.XXXXXX")"
+ts="$(date -u +%Y%m%dT%H%M%SZ)"
+for agent in <agents>; do
+  mkdir "$run/$agent"
+  echo "$agent ${ts}__$(openssl rand -hex 4) $run/$agent"
+done
 ```
 
-- Each agent that ran must have added exactly one pair.
-- If an agent added no pair, or its pair fails validation, send the validator output back to that agent and ask it to fix and rewrite the pair. If it fails a second time, report that agent as failed in the summary.
+Keep the printed table: step 3 checks every pair against it. Assigning the values here is what gives step 3 that table, and with it an assigned stem without a pair, or a new pair under a stem nobody was given, shows up. On 2026-09-25, with no table, one agent wrote its JSON under the stem another agent had generated and then moved it to a new name of its own; counting one pair per agent could not tell. The table does not catch a pair that another agent overwrites and then regenerates, because the regenerated pair names its owner again; the exclusive first write of `audit-run-protocol` §7.2 is what prevents that case.
+
+Give each agent its own values in its prompt: `Audit the repository at <root> (commit <sha>) for your dimensions. Follow your mandatory prelude. Your output stem is <stem>. Your working directory is <directory>.`
+
+### 3. Validate the outputs
+
+Each agent validates its own pair before it finishes (`audit-run-protocol` §7.3). Validate again here, because an agent can stop before its last step. Run the validator once per agent, with the agent name and stem from the table of step 2:
+
+```bash
+python3 "${CLAUDE_PLUGIN_ROOT}/scripts/validate-audit.py" --agent <agent> <repo>/.claude-marketplace-audits/<stem>.json
+```
+
+- Each agent that ran must have written the pair of its own stem. `--agent` fails when `scope.agents_used` names another agent, which is what a pair overwritten by another agent looks like.
+- A new file that is neither in the listing kept in step 1 nor one of the assigned stems means an agent wrote under a name it was not given. Report it to the user and leave it in place.
+- If an agent's pair is missing or fails validation, send the validator output back to that agent and ask it to fix and rewrite the pair. If it fails a second time, report that agent as failed in the summary.
 - Never edit an agent's JSON or Markdown yourself.
 
 ### 4. Compare with the previous run

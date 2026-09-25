@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 """Validate ios-audit-agents output pairs against AUDIT_OUTPUT_SPEC.md v1.0.
 
-Usage: validate-audit.py <stem>.json [<stem>.json ...]
+Usage: validate-audit.py [--agent <agent-name>] <stem>.json [<stem>.json ...]
+
+--agent also requires scope.agents_used to name exactly that agent, so that a
+pair overwritten by another agent fails. A plugin prefix ("ios-audit-agents:")
+is ignored on both sides.
 
 Prints one ERROR/WARNING line per problem and a final OK/FAILED line per file.
 Exits 1 if any file has errors. Standard library only.
 """
 
+import argparse
 import json
 import re
 import sys
@@ -77,7 +82,7 @@ def is_line(value):
     return is_int(value) or (isinstance(value, str) and re.fullmatch(r"\d+(-\d+)?", value) is not None)
 
 
-def validate(json_path, catalog):
+def validate(json_path, catalog, agent=None):
     errors, warnings = [], []
     err, warn = errors.append, warnings.append
 
@@ -151,6 +156,8 @@ def validate(json_path, catalog):
     if not (isinstance(agents_used, list) and agents_used and all(is_str(a) for a in agents_used)):
         err("scope.agents_used is missing or empty")
         agents_used = []
+    if agent and agents_used and [a.split(":")[-1] for a in agents_used] != [agent]:
+        err(f"scope.agents_used is {agents_used}, expected ['{agent}']; another agent wrote this pair")
 
     findings = record.get("findings")
     if not isinstance(findings, list):
@@ -312,16 +319,20 @@ def validate(json_path, catalog):
 
 
 def main(argv):
-    if not argv:
-        print(__doc__.strip(), file=sys.stderr)
-        return 2
+    parser = argparse.ArgumentParser(description=__doc__.strip().splitlines()[0])
+    parser.add_argument("--agent", help="agent that must be the only entry of scope.agents_used")
+    parser.add_argument("files", nargs="+", metavar="<stem>.json")
+    args = parser.parse_args(argv)
+    agent = args.agent.split(":")[-1] if args.agent is not None else None
+    if agent == "":
+        parser.error("--agent needs an agent name")
     catalog = load_catalog()
     if catalog is None:
         print(f"WARNING: cannot read {CATALOG}; ai_risk_id values are not checked against the catalog")
     failed = False
-    for argument in argv:
+    for argument in args.files:
         json_path = Path(argument)
-        errors, warnings = validate(json_path, catalog)
+        errors, warnings = validate(json_path, catalog, agent)
         for message in errors:
             print(f"ERROR: {json_path.name}: {message}")
         for message in warnings:

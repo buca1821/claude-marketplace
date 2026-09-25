@@ -99,7 +99,7 @@ Write only under the **audited repository**:
 <repo>/.claude-marketplace-audits/<UTC-timestamp>__<audit-id>.json
 ```
 
-Same naming rules as **`api-freshness-auditor`**: basic UTC timestamp, 8-char hex `audit_id`, shared stem.
+Same naming rules as **`api-freshness-auditor`**: basic UTC timestamp, 8-char hex `audit_id`, shared stem, taken from `audit-run-protocol` §7.1.
 
 **JSON `scope`:**
 

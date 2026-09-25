@@ -1,11 +1,13 @@
 ---
 name: audit-run-protocol
-description: How every ios-audit-agents auditor prepares and closes a run — locating the plugin's canonical documents, identifying the audited tree and commit, enumerating tracked sources, applying the audited project's own rules and accepted exceptions, and validating the Markdown + JSON pair before finishing. Preloaded by every auditor agent; also followed by /run-audits.
+description: How every ios-audit-agents auditor prepares and closes a run — locating the plugin's canonical documents, identifying the audited tree and commit, enumerating tracked sources, applying the audited project's own rules and accepted exceptions, naming the output pair and the working directory, and validating the Markdown + JSON pair before finishing. Preloaded by every auditor agent; also followed by /run-audits.
 ---
 
 # Audit run protocol
 
 Every auditor agent follows these steps around its own checks. The checks are only as good as the file list they run over, the project context they read, and the output they leave behind; each section below exists because a real run got one of those wrong.
+
+Section 7.1 applies from your first command: it fixes the name of your output pair and the directory for your intermediate files before you create any file.
 
 ## 1. Plugin documents
 
@@ -82,16 +84,39 @@ The audited repository may contain `.claude-marketplace-audits/ACCEPTED.md`. The
 
 ## 7. Writing and validating the output
 
-Write both files with Bash under `<repo>/.claude-marketplace-audits/`, sharing one stem:
+### 7.1 Output name and working directory
+
+Two values identify your run. The **stem** names your Markdown + JSON pair. The **working directory** holds every intermediate file: file lists, scripts that assemble the report, drafts.
+
+- **Launched by `/run-audits`** — your prompt gives both values. Use them exactly as given.
+- **Launched on your own**, with neither value in your prompt — create both with your first command, replacing `<agent>` with your agent name and `<base>` with your scratchpad directory when your environment names one, else `${TMPDIR:-/tmp}`:
+
+  ```bash
+  stem="$(date -u +%Y%m%dT%H%M%SZ)__$(openssl rand -hex 4)"
+  work="$(mktemp -d "<base>/<agent>.XXXXXX")"
+  echo "stem=$stem work=$work"
+  ```
+
+Then, in both cases:
+
+- Each Bash call starts a new shell, so a shell variable does not survive to the next call. Write the stem and the working directory as literal text in every later command. Never save either value to a file to read it back.
+- Keep every intermediate file under the working directory. Write nothing from this run directly in the scratchpad directory or in `/tmp`.
+- The stem's timestamp is also the JSON `timestamp`, and `metrics.duration_seconds` counts from it to the moment you write the pair. No start time needs to be stored anywhere else.
+
+Every agent a session launches shares that session's scratchpad directory. On 2026-09-25, seven auditors ran in parallel and kept their stems in files with generic names there (`stem.txt`, `start.txt`, `gen.py`). One agent read a `stem.txt` that another had just overwritten, and wrote its JSON over the other agent's pair.
+
+### 7.2 Writing the pair
+
+Write both files with Bash as `<repo>/.claude-marketplace-audits/<stem>.md` and `<stem>.json`.
+
+- **First write of each file: exclusive.** Create the file in place so that the write fails instead of replacing an existing file: `open(path, "x")` in Python, or a `>` redirection after `set -o noclobber` in shell. To place a draft from your working directory, use `cat <draft> > <path>`. `set -o noclobber` lasts only for the Bash call that sets it, so set it in the same call as the redirection. `cp` and `mv` ignore `noclobber`, so never use them for the first write.
+- If that first write fails because the file exists, the stem belongs to another run. Stop and report the stem to the caller. Never write, rename, delete or regenerate another run's pair, not even to restore it.
+- **Rewrites of your own pair.** After your first write succeeded, fix validation errors by overwriting your own files: `open(path, "w")` in Python, or `cat <draft> >| <path>` in shell, which overwrites even under `noclobber`. A `FileExistsError` or a "file exists" error on a file you created earlier in this run means you used the first-write command again, not that another run owns the stem.
+
+### 7.3 Validating the pair
 
 ```bash
-stem="$(date -u +%Y%m%dT%H%M%SZ)__$(openssl rand -hex 4)"
+python3 "${CLAUDE_PLUGIN_ROOT}/scripts/validate-audit.py" --agent <agent> "<repo>/.claude-marketplace-audits/<stem>.json"
 ```
 
-Then validate the pair:
-
-```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/scripts/validate-audit.py" "<repo>/.claude-marketplace-audits/$stem.json"
-```
-
-The script checks the file name, the Markdown sibling, every required field of `AUDIT_OUTPUT_SPEC.md` Section 3, and that `metrics` agrees with `findings`. Fix every error it reports and rewrite both files until it exits 0. Warnings may remain; list them in Methodology notes. End your answer to the caller with the stem and the validator's last line.
+The script checks the file name, the Markdown sibling, every required field of `AUDIT_OUTPUT_SPEC.md` Section 3, and that `metrics` agrees with `findings`. With `--agent`, it also checks that `scope.agents_used` names that agent and no other. Fix every error it reports and rewrite both files until it exits 0. Warnings may remain; list them in Methodology notes. End your answer to the caller with the stem and the validator's last line.
