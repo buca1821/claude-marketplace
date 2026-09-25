@@ -83,7 +83,7 @@ for agent in <agents>; do
 done
 ```
 
-Keep the printed table: step 3 checks every pair against it. Assigning the values here is what gives step 3 that table. If each agent generated its own stem, you would have to work out from the files alone which new pair belongs to which agent. On 2026-09-25 that check passed: one agent had written over another's pair and then regenerated it, so every agent still showed exactly one pair.
+Keep the printed table: step 3 checks every pair against it. Assigning the values here is what gives step 3 that table, and with it an assigned stem without a pair, or a new pair under a stem nobody was given, shows up. On 2026-09-25, with no table, one agent wrote its JSON under the stem another agent had generated and then moved it to a new name of its own; counting one pair per agent could not tell. The table does not catch a pair that another agent overwrites and then regenerates, because the regenerated pair names its owner again; the exclusive first write of `audit-run-protocol` §7.2 is what prevents that case.
 
 Give each agent its own values in its prompt: `Audit the repository at <root> (commit <sha>) for your dimensions. Follow your mandatory prelude. Your output stem is <stem>. Your working directory is <directory>.`
 
