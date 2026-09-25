@@ -87,7 +87,8 @@ Do **not** write under `docs/audits/`. Write only under the **audited repository
 ```
 
 - `<UTC-timestamp>`: ISO 8601 **basic** UTC, no colons, e.g. `20260428T153000Z`.
-- `<audit-id>`: 8 lowercase hex chars, e.g. from `openssl rand -hex 4` via `Bash`, or a stable random choice; must match between `.md` and `.json`.
+- `<audit-id>`: 8 lowercase hex chars; must match between `.md` and `.json`.
+- The stem `<UTC-timestamp>__<audit-id>` comes from `audit-run-protocol` §7.1: from your prompt when `/run-audits` launched you, otherwise generated once with your first command. Never pick another one mid-run.
 
 **JSON** — Top-level shape per spec Section 3.1. Required fields include `schema_version: "1.0"`, `model_version` from the quality model banner (e.g. `"0.1"`), `plugin_version` from ios-audit-agents `plugin.json` if known else `"unknown"`, `project`, `scope`:
 

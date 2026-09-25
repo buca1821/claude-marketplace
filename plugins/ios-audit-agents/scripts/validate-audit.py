@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 """Validate ios-audit-agents output pairs against AUDIT_OUTPUT_SPEC.md v1.0.
 
-Usage: validate-audit.py <stem>.json [<stem>.json ...]
+Usage: validate-audit.py [--agent <agent-name>] <stem>.json [<stem>.json ...]
+
+--agent also requires scope.agents_used to name exactly that agent, so that a
+pair overwritten by another agent fails. A plugin prefix ("ios-audit-agents:")
+is ignored.
 
 Prints one ERROR/WARNING line per problem and a final OK/FAILED line per file.
 Exits 1 if any file has errors. Standard library only.
@@ -77,7 +81,7 @@ def is_line(value):
     return is_int(value) or (isinstance(value, str) and re.fullmatch(r"\d+(-\d+)?", value) is not None)
 
 
-def validate(json_path, catalog):
+def validate(json_path, catalog, agent=None):
     errors, warnings = [], []
     err, warn = errors.append, warnings.append
 
@@ -151,6 +155,8 @@ def validate(json_path, catalog):
     if not (isinstance(agents_used, list) and agents_used and all(is_str(a) for a in agents_used)):
         err("scope.agents_used is missing or empty")
         agents_used = []
+    if agent and agents_used and agents_used != [agent]:
+        err(f"scope.agents_used is {agents_used}, expected ['{agent}']; another agent wrote this pair")
 
     findings = record.get("findings")
     if not isinstance(findings, list):
@@ -312,7 +318,11 @@ def validate(json_path, catalog):
 
 
 def main(argv):
-    if not argv:
+    agent = None
+    if argv and argv[0] == "--agent":
+        agent = argv[1].split(":")[-1] if len(argv) > 1 else ""
+        argv = argv[2:]
+    if not argv or agent == "":
         print(__doc__.strip(), file=sys.stderr)
         return 2
     catalog = load_catalog()
@@ -321,7 +331,7 @@ def main(argv):
     failed = False
     for argument in argv:
         json_path = Path(argument)
-        errors, warnings = validate(json_path, catalog)
+        errors, warnings = validate(json_path, catalog, agent)
         for message in errors:
             print(f"ERROR: {json_path.name}: {message}")
         for message in warnings:

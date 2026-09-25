@@ -33,7 +33,7 @@ Every agent preloads its skills through the `skills` field of its frontmatter, s
 
 ## Scripts
 
-- **`scripts/validate-audit.py`** — validates a Markdown + JSON pair against `AUDIT_OUTPUT_SPEC.md` (file name, required fields, metrics consistent with findings). Agents run it before finishing; `/run-audits` runs it again on every new pair.
+- **`scripts/validate-audit.py`** — validates a Markdown + JSON pair against `AUDIT_OUTPUT_SPEC.md` (file name, required fields, metrics consistent with findings). With `--agent <name>`, it also checks that the pair names that agent in `scope.agents_used`. Agents run it before finishing; `/run-audits` runs it again on every pair, against the stem it assigned to each agent.
 
 ## Accepted exceptions
 

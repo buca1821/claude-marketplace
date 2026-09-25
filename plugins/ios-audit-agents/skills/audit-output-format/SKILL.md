@@ -16,7 +16,7 @@ This skill is the consultative lens over the plugin's output contract. It tells 
 - All required fields must be present even when empty: `findings: []`, `metrics.by_severity: {"P0": 0, "P1": 0, "P2": 0, "P3": 0}`, `metrics.by_dimension: {}`, `metrics.ai_typical_ratio: 0.0` (not `null`).
 - `notes.dimensions_out_of_plugin_scope` is `["3.1", "3.10"]` for quality model v0.1. If the model version changes, recheck this list against the new Section 7.2.
 - The privacy rules in Section 4 are **non-negotiable**. When in doubt, redact.
-- Validate every pair before finishing: `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/validate-audit.py" <stem>.json` checks the file name, the Markdown sibling, the required fields and that `metrics` agrees with `findings` (see the `audit-run-protocol` skill, section 7).
+- Validate every pair before finishing: `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/validate-audit.py" --agent <agent> <stem>.json` checks the file name, the Markdown sibling, the required fields, that `metrics` agrees with `findings`, and that `scope.agents_used` names that agent (see the `audit-run-protocol` skill, section 7).
 
 ## Topic router
 
