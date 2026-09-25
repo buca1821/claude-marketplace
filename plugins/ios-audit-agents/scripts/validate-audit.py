@@ -69,6 +69,10 @@ def is_int(value):
     return isinstance(value, int) and not isinstance(value, bool)
 
 
+def is_dimension(value):
+    return isinstance(value, str) and value in AUDITABLE
+
+
 def is_line(value):
     return is_int(value) or (isinstance(value, str) and re.fullmatch(r"\d+(-\d+)?", value) is not None)
 
@@ -141,7 +145,7 @@ def validate(json_path, catalog):
         err("scope.dimensions_audited is missing or empty")
         dimensions_audited = []
     for dimension in dimensions_audited:
-        if dimension not in AUDITABLE:
+        if not is_dimension(dimension):
             err(f"scope.dimensions_audited contains '{dimension}', which is not an auditable dimension")
     agents_used = scope.get("agents_used")
     if not (isinstance(agents_used, list) and agents_used and all(is_str(a) for a in agents_used)):
@@ -173,7 +177,7 @@ def validate(json_path, catalog):
                 warn(f"{where} does not use the '{expected_prefix}' prefix of {agents_used[0]}")
 
         dimension = finding.get("dimension")
-        if dimension not in AUDITABLE:
+        if not is_dimension(dimension):
             err(f"{where}.dimension '{dimension}' is not an auditable dimension")
         elif dimension not in dimensions_audited:
             err(f"{where}.dimension '{dimension}' is not listed in scope.dimensions_audited")
@@ -208,7 +212,7 @@ def validate(json_path, catalog):
                     err(f"{where}.ai_risk_id '{risk_id}' is not in AI_RISK_CATALOG.md")
                 elif catalog is not None and catalog[risk_id].startswith("retired"):
                     err(f"{where}.ai_risk_id '{risk_id}' is retired")
-                if dimension in AUDITABLE and risk_match.group(1) != dimension:
+                if is_dimension(dimension) and risk_match.group(1) != dimension:
                     warn(f"{where}.ai_risk_id '{risk_id}' belongs to dimension {risk_match.group(1)}, "
                          f"not {dimension}")
 
@@ -255,8 +259,8 @@ def validate(json_path, catalog):
     if not isinstance(by_dimension, dict):
         err("metrics.by_dimension is missing")
     else:
-        dimensions = {f.get("dimension") for f in valid_findings} | set(by_dimension)
-        for dimension in sorted(d for d in dimensions if isinstance(d, str)):
+        dimensions = {f.get("dimension") for f in valid_findings if isinstance(f.get("dimension"), str)}
+        for dimension in sorted(dimensions | set(by_dimension)):
             actual = sum(1 for f in valid_findings if f.get("dimension") == dimension)
             if by_dimension.get(dimension, 0) != actual:
                 err(f"metrics.by_dimension['{dimension}'] is {by_dimension.get(dimension, 0)!r}, findings has {actual}")
@@ -285,8 +289,12 @@ def validate(json_path, catalog):
                 err(f"notes lists '{dimension}' with zero findings, but it is not in scope.dimensions_audited")
             elif any(f.get("dimension") == dimension for f in valid_findings):
                 err(f"notes lists '{dimension}' with zero findings, but findings has entries for it")
-    if notes.get("dimensions_out_of_plugin_scope") != OUT_OF_SCOPE and model_version == "0.1":
-        err(f"notes.dimensions_out_of_plugin_scope must be {OUT_OF_SCOPE} for quality model 0.1")
+    if model_version == "0.1":
+        if notes.get("dimensions_out_of_plugin_scope") != OUT_OF_SCOPE:
+            err(f"notes.dimensions_out_of_plugin_scope must be {OUT_OF_SCOPE} for quality model 0.1")
+    elif is_str(model_version):
+        warn(f"quality model '{model_version}' is unknown to this validator; "
+             "notes.dimensions_out_of_plugin_scope was not checked")
 
     # Markdown projection (spec 2.1)
     if md_path.is_file():
@@ -297,7 +305,7 @@ def validate(json_path, catalog):
         if is_str(audit_id) and audit_id not in markdown:
             err("Markdown does not mention the audit_id")
         for finding_id in sorted(seen_ids):
-            if finding_id not in markdown:
+            if not re.search(rf"(?<![\w-]){re.escape(finding_id)}(?![\w-])", markdown):
                 err(f"Markdown does not mention finding '{finding_id}'")
 
     return errors, warnings
