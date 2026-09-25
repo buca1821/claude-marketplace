@@ -109,7 +109,7 @@ Every agent a session launches shares that session's scratchpad directory. On 20
 
 Write both files with Bash as `<repo>/.claude-marketplace-audits/<stem>.md` and `<stem>.json`.
 
-- Create each file exclusively, so that the write fails instead of replacing an existing file: `open(path, "x")` in Python, or `set -o noclobber` before the `>` redirection in shell.
+- Create each file in place and exclusively, so that the write fails instead of replacing an existing file: `open(path, "x")` in Python, or a `>` redirection after `set -o noclobber` in shell. To place a draft from your working directory, use `cat <draft> > <path>` under `noclobber`. `cp` and `mv` ignore `noclobber`, so never use them to place the files.
 - If the creation fails because the file exists, the stem belongs to another run. Stop and report the stem to the caller. Never write, rename, delete or regenerate another run's pair, not even to restore it.
 - Once you have created your pair, rewriting it to fix validation errors is an ordinary overwrite of your own files.
 
