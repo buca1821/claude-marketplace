@@ -72,12 +72,12 @@ Never stash, commit, reset or check out on the user's behalf.
 | `cicd` | `ios-audit-agents:ci-cd-auditor` |
 | `security` | `ios-audit-agents:security-privacy-auditor` |
 
-Before launching, give each agent that will run its own stem and working directory (`audit-run-protocol` §7.1). Create them in one Bash call, listing only the agents that will run. Replace `<base>` with your scratchpad directory when your environment names one, else `${TMPDIR:-/tmp}`:
+Before launching, give each agent that will run its own stem and working directory (`audit-run-protocol` §7.1). Create them in one Bash call. Replace `<base>` with your scratchpad directory when your environment names one, else `${TMPDIR:-/tmp}`. Replace `<agents>` with the names of the agents that will run, without the plugin prefix: all seven for `full`, one for a specific scope.
 
 ```bash
 run="$(mktemp -d "<base>/ios-audit.XXXXXX")"
 ts="$(date -u +%Y%m%dT%H%M%SZ)"
-for agent in code-health-auditor architecture-auditor api-freshness-auditor ux-accessibility-auditor performance-auditor ci-cd-auditor security-privacy-auditor; do
+for agent in <agents>; do
   mkdir "$run/$agent"
   echo "$agent ${ts}__$(openssl rand -hex 4) $run/$agent"
 done
