@@ -109,9 +109,9 @@ Every agent a session launches shares that session's scratchpad directory. On 20
 
 Write both files with Bash as `<repo>/.claude-marketplace-audits/<stem>.md` and `<stem>.json`.
 
-- Create each file in place and exclusively, so that the write fails instead of replacing an existing file: `open(path, "x")` in Python, or a `>` redirection after `set -o noclobber` in shell. To place a draft from your working directory, use `cat <draft> > <path>` under `noclobber`. `cp` and `mv` ignore `noclobber`, so never use them to place the files.
-- If the creation fails because the file exists, the stem belongs to another run. Stop and report the stem to the caller. Never write, rename, delete or regenerate another run's pair, not even to restore it.
-- Once you have created your pair, rewriting it to fix validation errors is an ordinary overwrite of your own files.
+- **First write of each file: exclusive.** Create the file in place so that the write fails instead of replacing an existing file: `open(path, "x")` in Python, or a `>` redirection after `set -o noclobber` in shell. To place a draft from your working directory, use `cat <draft> > <path>`. `set -o noclobber` lasts only for the Bash call that sets it, so set it in the same call as the redirection. `cp` and `mv` ignore `noclobber`, so never use them for the first write.
+- If that first write fails because the file exists, the stem belongs to another run. Stop and report the stem to the caller. Never write, rename, delete or regenerate another run's pair, not even to restore it.
+- **Rewrites of your own pair.** After your first write succeeded, fix validation errors by overwriting your own files: `open(path, "w")` in Python, or `cat <draft> >| <path>` in shell, which overwrites even under `noclobber`. A `FileExistsError` or a "file exists" error on a file you created earlier in this run means you used the first-write command again, not that another run owns the stem.
 
 ### 7.3 Validating the pair
 

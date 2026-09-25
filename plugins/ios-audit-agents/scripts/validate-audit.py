@@ -323,7 +323,9 @@ def main(argv):
     parser.add_argument("--agent", help="agent that must be the only entry of scope.agents_used")
     parser.add_argument("files", nargs="+", metavar="<stem>.json")
     args = parser.parse_args(argv)
-    agent = args.agent.split(":")[-1] if args.agent else None
+    agent = args.agent.split(":")[-1] if args.agent is not None else None
+    if agent == "":
+        parser.error("--agent needs an agent name")
     catalog = load_catalog()
     if catalog is None:
         print(f"WARNING: cannot read {CATALOG}; ai_risk_id values are not checked against the catalog")

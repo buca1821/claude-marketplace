@@ -83,7 +83,7 @@ for agent in <agents>; do
 done
 ```
 
-Keep the printed table: step 3 checks every pair against it. The agents cannot pick these values themselves, because every agent this session launches shares its scratchpad directory, and names picked independently collide there.
+Keep the printed table: step 3 checks every pair against it. Assigning the values here is what gives step 3 that table. If each agent generated its own stem, you would have to work out from the files alone which new pair belongs to which agent. On 2026-09-25 that check passed: one agent had written over another's pair and then regenerated it, so every agent still showed exactly one pair.
 
 Give each agent its own values in its prompt: `Audit the repository at <root> (commit <sha>) for your dimensions. Follow your mandatory prelude. Your output stem is <stem>. Your working directory is <directory>.`
 
