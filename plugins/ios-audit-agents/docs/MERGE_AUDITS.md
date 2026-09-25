@@ -1,6 +1,6 @@
 # Merging multiple audit JSON files
 
-After `/run-audits` **full**, you may have **six** (or more) JSON files in the audited repository:
+After `/run-audits` **full**, you may have **seven** (one per agent) JSON files in the audited repository:
 
 ```text
 <repo>/.claude-marketplace-audits/<UTC>__<audit-id>.json
