@@ -1,10 +1,12 @@
 # run-audits
 
-Run the **bundled** ios-audit-agents auditors in parallel for a codebase audit. Each agent emits a **paired Markdown + JSON** record under the audited repository’s **`.claude-marketplace-audits/`** directory, per **`docs/AUDIT_OUTPUT_SPEC.md`**.
+Run the **bundled** ios-audit-agents auditors in parallel for a codebase audit. Each agent emits a **paired Markdown + JSON** record under the audited repository’s **`.claude-marketplace-audits/`** directory, per **`${CLAUDE_PLUGIN_ROOT}/docs/AUDIT_OUTPUT_SPEC.md`**.
 
-**Quality model (dimensions, severities P0–P3, AI risks):** `docs/QUALITY_FRAMEWORK.md` — use **Section 2** for severity, **Section 3** for dimension definitions, **Section 7.2** for which agent/skill operationalizes each dimension.
+**Quality model (dimensions, severities P0–P3, AI risks):** `${CLAUDE_PLUGIN_ROOT}/docs/QUALITY_FRAMEWORK.md` — use **Section 2** for severity, **Section 3** for dimension definitions, **Section 7.2** for which agent/skill operationalizes each dimension.
 
-**Skills:** `skills/quality-model`, `skills/ai-risk-catalog`, `skills/audit-output-format` (consultative; each agent loads these per its prompt). Dimension **3.9** is executed by **`ci-cd-auditor`**, which in turn loads **`skills/ci-cd-checklist/SKILL.md`** — there is no separate “headless” CI run outside that agent.
+**Skills:** every agent preloads `audit-run-protocol`, `quality-model`, `ai-risk-catalog` and `audit-output-format` through the `skills` field of its frontmatter. `audit-run-protocol` holds the rules all runs share: tracked-file enumeration, the audited project's own rules, accepted exceptions (`.claude-marketplace-audits/ACCEPTED.md`) and output validation. Dimension **3.9** is executed by **`ci-cd-auditor`**, which also preloads **`ci-cd-checklist`** — there is no separate “headless” CI run outside that agent.
+
+The agents read files and run `git` and `grep`. They do not build the app, boot simulators or use CI minutes.
 
 ## Bundled agents today
 
@@ -26,35 +28,78 @@ Scope: `$ARGUMENTS` (optional — `full`, `health`, `architecture`, `api`, `ux`,
 
 ## Process
 
-### If scope is `full` or empty — run seven agents in parallel
+### 1. Check the audited tree
 
-Launch these agents **simultaneously** using the Agent tool:
+From the repository to audit, before launching anything:
 
-1. **code-health-auditor**
-2. **architecture-auditor**
-3. **api-freshness-auditor**
-4. **ux-accessibility-auditor**
-5. **performance-auditor**
-6. **ci-cd-auditor**
-7. **security-privacy-auditor**
+```bash
+git rev-parse --show-toplevel
+git rev-parse --short HEAD
+git status --porcelain -- . ':(exclude).claude-marketplace-audits'
+ls -1 .claude-marketplace-audits/ 2>/dev/null
+```
 
-### If scope is specific — run only that agent
+Keep the directory listing: step 3 uses it to tell this run's files from older ones.
+
+If `git status` lists changes, stop and tell the user that the agents would audit uncommitted code while every report names the commit. Offer two options and wait for the answer:
+
+- **Audit a clean tree** — the user commits or stashes the changes, or runs `/run-audits` from a git worktree checked out at the commit to audit. The reports are then written in that worktree's `.claude-marketplace-audits/`.
+- **Audit the working tree as it is** — every report then states `plus uncommitted changes in <N> files` in its header (`audit-run-protocol` §2).
+
+Never stash, commit, reset or check out on the user's behalf.
+
+### 2. Launch the agents
+
+Give each agent the same prompt: `Audit the repository at <root> (commit <sha>) for your dimensions. Follow your mandatory prelude.`
+
+**If scope is `full` or empty**, launch these seven agents **simultaneously** with the Agent tool, using their full names:
+
+1. `ios-audit-agents:code-health-auditor`
+2. `ios-audit-agents:architecture-auditor`
+3. `ios-audit-agents:api-freshness-auditor`
+4. `ios-audit-agents:ux-accessibility-auditor`
+5. `ios-audit-agents:performance-auditor`
+6. `ios-audit-agents:ci-cd-auditor`
+7. `ios-audit-agents:security-privacy-auditor`
+
+**If scope is specific**, launch only that agent:
 
 | Argument | Who runs |
 |----------|-----------|
-| `health` | `code-health-auditor` |
-| `architecture` | `architecture-auditor` |
-| `api` | `api-freshness-auditor` |
-| `ux` | `ux-accessibility-auditor` |
-| `performance` | `performance-auditor` |
-| `cicd` | `ci-cd-auditor` |
-| `security` | `security-privacy-auditor` |
+| `health` | `ios-audit-agents:code-health-auditor` |
+| `architecture` | `ios-audit-agents:architecture-auditor` |
+| `api` | `ios-audit-agents:api-freshness-auditor` |
+| `ux` | `ios-audit-agents:ux-accessibility-auditor` |
+| `performance` | `ios-audit-agents:performance-auditor` |
+| `cicd` | `ios-audit-agents:ci-cd-auditor` |
+| `security` | `ios-audit-agents:security-privacy-auditor` |
 
-### After agents complete
+### 3. Validate the outputs
 
-1. **Discover outputs** — List the newest files in `<repo>/.claude-marketplace-audits/` matching `*__*.json` (and their `.md` siblings). Each agent run should add **one** timestamped pair.
-2. **Optional unified summary** — If the user wants a single Markdown digest, read the JSON files and produce one executive summary (counts by severity, top `ai_risk_id` values, dimensions covered). For **machine-side merge** recipes (`jq`, concatenating `findings`), see **`docs/MERGE_AUDITS.md`**. Do **not** delete per-agent JSON; the JSON is the canonical telemetry.
-3. **Escalation** — If any **P0–P1** findings exist, suggest filing issues or blocking the release until addressed.
+Each agent validates its own pair before it finishes (`audit-run-protocol` §7). Validate again here, because an agent can stop before its last step. The new files are those absent from the listing kept in step 1:
+
+```bash
+python3 "${CLAUDE_PLUGIN_ROOT}/scripts/validate-audit.py" <repo>/.claude-marketplace-audits/<new-stem>.json ...
+```
+
+- Each agent that ran must have added exactly one pair.
+- If an agent added no pair, or its pair fails validation, send the validator output back to that agent and ask it to fix and rewrite the pair. If it fails a second time, report that agent as failed in the summary.
+- Never edit an agent's JSON or Markdown yourself.
+
+### 4. Compare with the previous run
+
+For each agent, the previous run is the newest older JSON whose `scope.agents_used` names the same agent. Finding IDs are only stable within one run, so match findings by dimension, title and evidence paths. Classify this run's findings:
+
+- **New** — nothing in the previous run describes the same defect.
+- **Persisting** — a previous finding describes the same defect. Note a severity change if there is one.
+- **No longer reported** — a previous finding with no counterpart now. Say whether it was fixed, accepted in `ACCEPTED.md`, or is unexplained; do not assume a fix you have not seen in the code.
+
+### 5. Summarize
+
+Report to the user, per agent: the stem of its pair, the validation result, counts by severity, and the comparison from step 4. List the accepted exceptions the agents applied (from each report's Methodology notes).
+
+- **Optional unified digest** — If the user wants a single Markdown digest, read the JSON files and produce one executive summary (counts by severity, top `ai_risk_id` values, dimensions covered). For **machine-side merge** recipes (`jq`, concatenating `findings`), see **`${CLAUDE_PLUGIN_ROOT}/docs/MERGE_AUDITS.md`**. Do **not** delete per-agent JSON; the JSON is the canonical telemetry.
+- **Escalation** — If any **P0–P1** findings exist, suggest filing issues or blocking the release until addressed.
 
 ## Related
 

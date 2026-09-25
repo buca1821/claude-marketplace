@@ -66,6 +66,16 @@ Cuando hay más de una auditoría en el directorio, el plugin puede
 mantener un `index.json` que liste todas las ejecuciones en orden.
 Es opcional y aditivo; no sustituye los archivos por ejecución.
 
+### 1.4 Excepciones aceptadas (entrada)
+
+El equipo puede mantener `.claude-marketplace-audits/ACCEPTED.md` en el
+mismo directorio para registrar los hallazgos que ha decidido aceptar.
+Cada entrada lleva su motivo y la condición en la que el hallazgo debe
+volver a reportarse. Los agentes lo leen y nunca lo escriben. Su formato
+y la forma de aplicarlo están en la skill `audit-run-protocol`. No es
+una salida de auditoría: no tiene JSON asociado ni sigue el nombre de
+archivo de la sección 1.2.
+
 ---
 
 ## 2. Reporte Markdown

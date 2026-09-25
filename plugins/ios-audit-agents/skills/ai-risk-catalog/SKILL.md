@@ -5,7 +5,7 @@ description: The ios-audit-agents AI Risk Catalog v0.1 — stable identifiers (A
 
 # AI Risk Catalog — v0.1
 
-This skill is the consultative lens over the plugin's catalog of AI-typical risks. It tells an agent **which stable ID** to attach to a finding, **what status** that ID carries, and **how to look up entries**. It does not duplicate the catalog — the canonical source is `../../docs/AI_RISK_CATALOG.md` (English) and `../../docs/AI_RISK_CATALOG.es.md` (Spanish).
+This skill is the consultative lens over the plugin's catalog of AI-typical risks. It tells an agent **which stable ID** to attach to a finding, **what status** that ID carries, and **how to look up entries**. It does not duplicate the catalog — the canonical source is `${CLAUDE_PLUGIN_ROOT}/docs/AI_RISK_CATALOG.md` (English) and `${CLAUDE_PLUGIN_ROOT}/docs/AI_RISK_CATALOG.es.md` (Spanish).
 
 ## Operating rules
 

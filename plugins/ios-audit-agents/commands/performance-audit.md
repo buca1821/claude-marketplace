@@ -34,7 +34,7 @@ Read the target files and check for known anti-patterns:
 - [ ] Broad `@Observable` dependencies
 - [ ] Unstable `.id()` values
 - [ ] Images decoded on main thread
-- [ ] Missing `[weak self]` in escaping closures
+- [ ] Strong `self` kept alive by a stored `Task` across a long `await` / `sleep` (debounce, polling), or by a closure that `self` stores
 
 ### 3. Report findings
 

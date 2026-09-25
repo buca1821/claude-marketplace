@@ -27,6 +27,17 @@ Claude Code plugin: **seven auditors**, **`/run-audits`**, and **`/performance-a
 | `ai-risk-catalog` | Stable `AI-3.X-NNN` risk IDs |
 | `audit-output-format` | JSON schema v1.0 + Markdown report contract |
 | `ci-cd-checklist` | Operational checklist applied by **`ci-cd-auditor`** |
+| `audit-run-protocol` | Rules every run shares: plugin paths, tracked-file enumeration, the audited project's rules, accepted exceptions, output validation. Preloaded by every agent |
+
+Every agent preloads its skills through the `skills` field of its frontmatter, so it does not depend on finding them on disk.
+
+## Scripts
+
+- **`scripts/validate-audit.py`** — validates a Markdown + JSON pair against `AUDIT_OUTPUT_SPEC.md` (file name, required fields, metrics consistent with findings). Agents run it before finishing; `/run-audits` runs it again on every new pair.
+
+## Accepted exceptions
+
+A team can record findings it has decided to accept in `<audited-repo>/.claude-marketplace-audits/ACCEPTED.md`. Agents read the file, skip matching findings while their revisit condition does not hold, and list them in the report's Methodology notes. Format: `skills/audit-run-protocol/SKILL.md`, section 5.
 
 ## Documentation
 

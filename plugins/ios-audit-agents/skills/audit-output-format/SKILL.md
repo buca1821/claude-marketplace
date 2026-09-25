@@ -5,7 +5,7 @@ description: The ios-audit-agents audit output contract — schema v1.0 covering
 
 # Audit output format — schema v1.0
 
-This skill is the consultative lens over the plugin's output contract. It tells an agent or command **where to write** the audit results, **what fields are required**, **which reference identifiers exist**, and **what must never be included** in the evidence. It does not duplicate the spec — the canonical source is `../../docs/AUDIT_OUTPUT_SPEC.md` (English) and `../../docs/AUDIT_OUTPUT_SPEC.es.md` (Spanish).
+This skill is the consultative lens over the plugin's output contract. It tells an agent or command **where to write** the audit results, **what fields are required**, **which reference identifiers exist**, and **what must never be included** in the evidence. It does not duplicate the spec — the canonical source is `${CLAUDE_PLUGIN_ROOT}/docs/AUDIT_OUTPUT_SPEC.md` (English) and `${CLAUDE_PLUGIN_ROOT}/docs/AUDIT_OUTPUT_SPEC.es.md` (Spanish).
 
 ## Operating rules
 
@@ -16,6 +16,7 @@ This skill is the consultative lens over the plugin's output contract. It tells 
 - All required fields must be present even when empty: `findings: []`, `metrics.by_severity: {"P0": 0, "P1": 0, "P2": 0, "P3": 0}`, `metrics.by_dimension: {}`, `metrics.ai_typical_ratio: 0.0` (not `null`).
 - `notes.dimensions_out_of_plugin_scope` is `["3.1", "3.10"]` for quality model v0.1. If the model version changes, recheck this list against the new Section 7.2.
 - The privacy rules in Section 4 are **non-negotiable**. When in doubt, redact.
+- Validate every pair before finishing: `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/validate-audit.py" <stem>.json` checks the file name, the Markdown sibling, the required fields and that `metrics` agrees with `findings` (see the `audit-run-protocol` skill, section 7).
 
 ## Topic router
 

@@ -62,6 +62,16 @@ When more than one audit exists in the directory, the plugin may
 maintain an `index.json` file listing all runs in order. This is
 optional and additive; it does not replace the per-run files.
 
+### 1.4 Accepted exceptions (input)
+
+The team may keep `.claude-marketplace-audits/ACCEPTED.md` in the same
+directory to record findings it has decided to accept, each with its
+reason and the condition under which it should be reported again.
+Agents read it and never write it; its format and how agents apply it
+are defined by the `audit-run-protocol` skill. It is not an audit
+output: it has no JSON counterpart and does not follow the naming in
+Section 1.2.
+
 ---
 
 ## 2. Markdown report

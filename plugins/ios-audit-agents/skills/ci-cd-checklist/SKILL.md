@@ -9,9 +9,9 @@ This skill is the operational lens for auditing **dimension 3.9 — CI/CD & rele
 
 The canonical sources are:
 
-- Dimension definition: `../../docs/QUALITY_FRAMEWORK.md` Section 3.9.
-- AI-typical risk: `../../docs/AI_RISK_CATALOG.md` entry `AI-3.9-001`.
-- Output contract: `../../docs/AUDIT_OUTPUT_SPEC.md`.
+- Dimension definition: `${CLAUDE_PLUGIN_ROOT}/docs/QUALITY_FRAMEWORK.md` Section 3.9.
+- AI-typical risk: `${CLAUDE_PLUGIN_ROOT}/docs/AI_RISK_CATALOG.md` entry `AI-3.9-001`.
+- Output contract: `${CLAUDE_PLUGIN_ROOT}/docs/AUDIT_OUTPUT_SPEC.md`.
 
 ## Scope
 
@@ -42,7 +42,8 @@ When a candidate finding straddles a boundary, prefer the more specific dimensio
 - Always emit `dimension: "3.9"` on findings produced by this skill.
 - The single AI-typical risk in the catalog for this dimension today is `AI-3.9-001`. Use it whenever the finding matches "checks run but are not required to merge". Do not invent other AI risk IDs for 3.9.
 - If a check fails for "no CI configuration found at all", emit a single P1 finding rather than one per missing capability — surface the absence, do not pretend each item is independent.
-- Branch protection lives on the hosting platform (GitHub, GitLab, Bitbucket), not in the repo. If the agent cannot inspect the platform settings (no API token, no `gh`/`glab` CLI), record that limitation in the audit's `notes`, do not infer protection from the absence of evidence.
+- Branch protection lives on the hosting platform (GitHub, GitLab, Bitbucket), not in the repo. If the agent cannot inspect the platform settings (no API token, no `gh`/`glab` CLI), record that limitation in the audit's `notes`, do not infer protection from the absence of evidence. An answer saying the feature is unavailable on the current plan is different: GitHub answers HTTP 403 "Upgrade to GitHub Pro or make this repository public" for branch protection and rulesets on private repositories under GitHub Free, and that is evidence that no protection exists, not an inspection gap.
+- A team may accept a plan limitation and compensate for it elsewhere, for example with a merge script that waits for the checks. Such a decision is recorded in `.claude-marketplace-audits/ACCEPTED.md`; apply it as the `audit-run-protocol` skill (section 5) describes instead of re-reporting C5-C7 on every run.
 - Severity defaults below are *defaults*. Override when the project context warrants it (e.g. a side-project with no users may downgrade signing automation from P1 to P2). Document the override in the finding's `remediation` paragraph.
 
 ## Topic router
@@ -61,7 +62,7 @@ Each item has: what to check, where to look, severity default, AI-typical mappin
 
 ### C1 — A CI configuration exists
 
-- **Check**: at least one of `.github/workflows/*.yml`, `.gitlab-ci.yml`, `bitrise.yml`, `.xcode-cloud/`, `fastlane/Fastfile` is present and valid.
+- **Check**: at least one of `.github/workflows/*.yml`, `.gitlab-ci.yml`, `bitrise.yml`, `ci_scripts/` (Xcode Cloud), `fastlane/Fastfile` is present and valid.
 - **Severity default if missing**: P1.
 - **AI-typical**: `false` (absence is not specifically AI-typical; AI usually scaffolds *something*).
 - **References**: `iso:25010`.
@@ -157,7 +158,7 @@ Each item has: what to check, where to look, severity default, AI-typical mappin
 - **Severity default if missing**: P0.
 - **AI-typical**: `false` for this dimension (the AI-typical risk for hardcoded secrets is `AI-3.6-001`, not 3.9).
 - **References**: `masvs:storage`.
-- **Notes**: when emitting this finding, set `dimension: "3.9"` (the configuration file is a CI artefact) and add a `remediation` line that mentions the related `AI-3.6-001` risk so the future security agent can connect both findings.
+- **Notes**: when emitting this finding, set `dimension: "3.9"` (the configuration file is a CI artefact) and add a `remediation` line that mentions the related `AI-3.6-001` risk so `security-privacy-auditor` can connect both findings.
 
 ## Severity quick reference for this skill
 
@@ -206,7 +207,7 @@ These hints help find the evidence; they do not change what is being audited.
 - **GitHub Actions**: workflows under `.github/workflows/`. Branch protection via the `gh` CLI (`gh api repos/:owner/:repo/branches/<branch>/protection`) or repo settings. Required status checks under `required_status_checks.contexts`.
 - **GitLab CI**: pipeline in `.gitlab-ci.yml`. Branch protection via `glab` CLI (`glab api projects/:id/protected_branches`) or repo settings. "Push rules" cover force-push and direct-push policies. Status checks not required for merge unless the project enforces "Pipelines must succeed".
 - **Bitrise**: pipeline in `bitrise.yml`. Required for merge is configured in the hosting platform (still GitHub/GitLab), not in Bitrise.
-- **Xcode Cloud**: workflows in App Store Connect; configuration may be referenced from `.xcode-cloud/` or `ci_scripts/`. Required-for-merge again lives on the hosting platform.
+- **Xcode Cloud**: workflows are defined in App Store Connect, not in the repository, so the agent cannot read them; the repository holds only custom build scripts in `ci_scripts/` (`ci_post_clone.sh`, `ci_pre_xcodebuild.sh`, `ci_post_xcodebuild.sh`). Use project documentation and the check runs on recent pull requests (`gh pr checks`) as evidence of what the workflows do, and say so in `notes`. Required-for-merge again lives on the hosting platform.
 - **Fastlane**: `fastlane/Fastfile`. Look for `match`, `gym`, `pilot`, `deliver` lanes for signing, build, TestFlight, App Store. Lanes invoked from CI workflows are the link between the two.
 
 ## Bilingual note

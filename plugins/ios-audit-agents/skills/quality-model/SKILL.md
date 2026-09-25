@@ -5,7 +5,7 @@ description: The ios-audit-agents quality model v0.1 — engineering quality mod
 
 # Quality model — v0.1
 
-This skill is the consultative lens over the plugin's quality model. It tells an agent **which dimension** a candidate finding belongs to, **which severity** to use, and **how the model is operationalized today**. It does not duplicate the model — the canonical source is `../../docs/QUALITY_FRAMEWORK.md` (English) and `../../docs/QUALITY_FRAMEWORK.es.md` (Spanish).
+This skill is the consultative lens over the plugin's quality model. It tells an agent **which dimension** a candidate finding belongs to, **which severity** to use, and **how the model is operationalized today**. It does not duplicate the model — the canonical source is `${CLAUDE_PLUGIN_ROOT}/docs/QUALITY_FRAMEWORK.md` (English) and `${CLAUDE_PLUGIN_ROOT}/docs/QUALITY_FRAMEWORK.es.md` (Spanish).
 
 ## Operating rules
 
