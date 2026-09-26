@@ -16,7 +16,7 @@ Claude Code plugin: **seven auditors**, **`/run-audits`**, and **`/performance-a
 
 ## Commands
 
-- **`/run-audits`** — Launches agents in parallel (`full` = all seven). See `commands/run-audits.md`.
+- **`/run-audits`** — Launches agents in parallel (`full` = all seven), validates their pairs, compares them with the previous run and ends with a readable report: a table per agent with each finding's severity, effect and fix, as a document on the web when the session has the Claude Docs connector. See `commands/run-audits.md`.
 - **`/performance-audit`** — Scoped SwiftUI performance pass; complements `performance-auditor`. See `commands/performance-audit.md`.
 
 ## Skills
