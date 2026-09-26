@@ -81,9 +81,10 @@ archivo de la sección 1.2.
 `/run-audits` termina escribiendo un informe para que lo lea una
 persona, construido a partir de los pares de la ejecución: una tabla
 por agente con la gravedad de cada hallazgo, qué pasa, a quién afecta,
-dónde está y qué hacer. Va a un conector de documentos cuando la sesión
-tiene uno; si no, se escribe como
-`.claude-marketplace-audits/REPORT-<timestamp UTC>.md`. Se deriva del
+dónde está y qué hacer. Es un documento de Claude Docs cuando la sesión
+tiene ese conector; si no, se escribe como
+`.claude-marketplace-audits/REPORT-<timestamp UTC>.md`. No se usa ningún
+otro servicio de documentos. Se deriva del
 JSON, que sigue siendo el registro canónico. No tiene JSON asociado ni
 sigue el nombre de archivo de la sección 1.2.
 

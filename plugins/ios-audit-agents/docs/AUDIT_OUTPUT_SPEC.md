@@ -76,9 +76,10 @@ Section 1.2.
 
 `/run-audits` ends by writing one report for a person to read, built
 from the run's pairs: a table per agent with each finding's severity,
-what happens, who is affected, where and what to do. It goes to a
-document connector when the session has one; otherwise it is written as
-`.claude-marketplace-audits/REPORT-<UTC-timestamp>.md`. It is derived
+what happens, who is affected, where and what to do. It is a Claude Docs
+document when the session has that connector; otherwise it is written as
+`.claude-marketplace-audits/REPORT-<UTC-timestamp>.md`. No other
+document service is used. It is derived
 from the JSON, which stays the canonical record. It has no JSON
 counterpart and does not follow the naming in Section 1.2.
 

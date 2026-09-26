@@ -112,12 +112,12 @@ For each agent, the previous run is the newest older JSON whose `scope.agents_us
 
 Report to the user, per agent: the stem of its pair, the validation result, counts by severity, and the comparison from step 4. List the accepted exceptions the agents applied (from each report's Methodology notes).
 
-- **Machine-side merge** — For `jq` recipes that concatenate `findings` across runs, see **`${CLAUDE_PLUGIN_ROOT}/docs/MERGE_AUDITS.md`**. The document for a person to read is the report of step 6. Do **not** delete per-agent JSON; the JSON is the canonical telemetry.
+- **Machine-side merge** — For `jq` recipes that concatenate `findings` across runs or count the most frequent `ai_risk_id` values, see **`${CLAUDE_PLUGIN_ROOT}/docs/MERGE_AUDITS.md`**. The document for a person to read is the report of step 6; it replaces the hand-written digest this step used to offer. Do **not** delete per-agent JSON; the JSON is the canonical telemetry.
 - **Escalation** — If any **P0–P1** findings exist, suggest filing issues or blocking the release until addressed.
 
 ### 6. Publish the readable report
 
-Every run ends with one document a person can read without knowing the audit: what each finding is, how serious it is, and what to do about it. Write it in the language of the conversation, headings and column names included, from this run's pairs only (the stems of step 2). The JSON stays the canonical record; the report is a reading of it.
+Every run ends with one document a person can read without knowing the audit: what each finding is, how serious it is, and what to do about it. Write it after steps 1 to 5, never before: it reads the pairs that step 3 validated. It does not replace the chat summary of step 5, which keeps the validation results, the comparison with the previous run and the accepted exceptions. Write it in the language of the conversation, headings and column names included, from this run's pairs only (the stems of step 2). The JSON stays the canonical record; the report is a reading of it.
 
 **Content rules**
 
@@ -129,8 +129,10 @@ Every run ends with one document a person can read without knowing the audit: wh
 **Structure**
 
 1. Title `<project> audit <YYYY-MM-DD>: findings`, then the date.
-2. A **Summary** section: one sentence with the commit, the date and the count per severity, then a table of the four severities with their meaning in plain words (`QUALITY_FRAMEWORK.md` Section 2), then one line naming that scale as the source.
-3. One section per agent that ran, numbered, titled with its area and its number of findings, for example `2. UX and accessibility (13)`, in this order: security and privacy, UX and accessibility, CI/CD, performance, API freshness, code health, architecture.
+2. A **Summary** section: one sentence with the commit, the date and the count per severity, then a table of the four severities with their meaning in plain words (`QUALITY_FRAMEWORK.md` Section 2), then one line naming that scale as the source. Two cases change that sentence:
+   - When step 1 audited the working tree as it is, the sentence says so: "on commit `<sha>` plus uncommitted changes in `<N>` files". The JSON does not record this; take it from step 1.
+   - When an agent that was launched produced no valid pair (step 3), the sentence names the areas that were not audited, and the counts cover only the agents that reported.
+3. One section per agent that ran, numbered, titled with its area and its number of findings, for example `2. UX and accessibility (13)`, in this order: security and privacy, UX and accessibility, CI/CD, performance, API freshness, code health, architecture. An agent that produced no valid pair keeps its section, titled `(not audited)`, with one sentence saying so instead of a table. An agent with a valid pair and no findings keeps its section too, with one sentence saying nothing was found.
 4. In each section, one table with a row per finding, most severe first, and these five columns:
 
 | Column | Holds |
@@ -143,7 +145,7 @@ Every run ends with one document a person can read without knowing the audit: wh
 
 **Where it goes**
 
-- **When the session has the Claude Docs connector** (tools named `…Claude_Docs__batch`, `…Claude_Docs__update`), create a document with it and follow the connector's own instructions: the outline first, with one pending block per section, then open it for the user, then fill one section per call. Give the user its link.
+- **When the session has the Claude Docs connector** (tools named `…Claude_Docs__batch`, `…Claude_Docs__update`), create a document with it. Use the connector's calls as its guide describes them: the outline first, with one pending block per section, then open it for the user, then fill one section per call. Two of its general rules give way to this command: the document is created here, at step 6, not with the first call of the turn; and the chat keeps step 5's summary, followed by one line with the document's link. Use no other document service.
 - **Otherwise**, write it as Markdown to `<repo>/.claude-marketplace-audits/REPORT-<timestamp>.md`, with the timestamp of this run's stems, and give the user its path. That file is not an audit output: it has no JSON and does not follow the naming of `AUDIT_OUTPUT_SPEC.md` Section 1.2.
 
 ## Related
