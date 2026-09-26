@@ -1,6 +1,6 @@
 # run-audits
 
-Run the **bundled** ios-audit-agents auditors in parallel for a codebase audit. Each agent emits a **paired Markdown + JSON** record under the audited repository’s **`.claude-marketplace-audits/`** directory, per **`${CLAUDE_PLUGIN_ROOT}/docs/AUDIT_OUTPUT_SPEC.md`**.
+Run the **bundled** ios-audit-agents auditors in parallel for a codebase audit. Each agent emits a **paired Markdown + JSON** record under the audited repository’s **`.claude-marketplace-audits/`** directory, per **`${CLAUDE_PLUGIN_ROOT}/docs/AUDIT_OUTPUT_SPEC.md`**. The run ends with one readable report built from those pairs (step 6).
 
 **Quality model (dimensions, severities P0–P3, AI risks):** `${CLAUDE_PLUGIN_ROOT}/docs/QUALITY_FRAMEWORK.md` — use **Section 2** for severity, **Section 3** for dimension definitions, **Section 7.2** for which agent/skill operationalizes each dimension.
 
@@ -112,8 +112,39 @@ For each agent, the previous run is the newest older JSON whose `scope.agents_us
 
 Report to the user, per agent: the stem of its pair, the validation result, counts by severity, and the comparison from step 4. List the accepted exceptions the agents applied (from each report's Methodology notes).
 
-- **Optional unified digest** — If the user wants a single Markdown digest, read the JSON files and produce one executive summary (counts by severity, top `ai_risk_id` values, dimensions covered). For **machine-side merge** recipes (`jq`, concatenating `findings`), see **`${CLAUDE_PLUGIN_ROOT}/docs/MERGE_AUDITS.md`**. Do **not** delete per-agent JSON; the JSON is the canonical telemetry.
+- **Machine-side merge** — For `jq` recipes that concatenate `findings` across runs, see **`${CLAUDE_PLUGIN_ROOT}/docs/MERGE_AUDITS.md`**. The document for a person to read is the report of step 6. Do **not** delete per-agent JSON; the JSON is the canonical telemetry.
 - **Escalation** — If any **P0–P1** findings exist, suggest filing issues or blocking the release until addressed.
+
+### 6. Publish the readable report
+
+Every run ends with one document a person can read without knowing the audit: what each finding is, how serious it is, and what to do about it. Write it in the language of the conversation, headings and column names included, from this run's pairs only (the stems of step 2). The JSON stays the canonical record; the report is a reading of it.
+
+**Content rules**
+
+- One row per finding of this run. Add nothing, drop nothing, merge nothing, and keep each finding's severity as the JSON gives it.
+- Write each row from the finding's `title`, `remediation` and evidence, and from its section in the agent's Markdown. Read the cited file only when the finding does not say who is affected. Never state an effect the finding does not support.
+- Plain words. No finding IDs, no `ai_risk_id`, no dimension numbers. A technical term the reader may not know gets a one-line definition under the section heading, the first time a section needs it (for example contrast, the main thread, a deprecated API).
+- When the finding cites an issue or pull request that already tracks it, name it in "What to do". When the evidence says nothing was measured, the row says so.
+
+**Structure**
+
+1. Title `<project> audit <YYYY-MM-DD>: findings`, then the date.
+2. A **Summary** section: one sentence with the commit, the date and the count per severity, then a table of the four severities with their meaning in plain words (`QUALITY_FRAMEWORK.md` Section 2), then one line naming that scale as the source.
+3. One section per agent that ran, numbered, titled with its area and its number of findings, for example `2. UX and accessibility (13)`, in this order: security and privacy, UX and accessibility, CI/CD, performance, API freshness, code health, architecture.
+4. In each section, one table with a row per finding, most severe first, and these five columns:
+
+| Column | Holds |
+|---|---|
+| Severity | P0–P3, in bold for P0 and P1 |
+| What happens | the defect, in one or two sentences |
+| What breaks / who is affected | the consequence for a user, the team or the release |
+| Where | one file name, the most telling one; "and N more" when there are several |
+| What to do | the fix in one or two sentences, with the issue or PR that tracks it |
+
+**Where it goes**
+
+- **When the session has the Claude Docs connector** (tools named `…Claude_Docs__batch`, `…Claude_Docs__update`), create a document with it and follow the connector's own instructions: the outline first, with one pending block per section, then open it for the user, then fill one section per call. Give the user its link.
+- **Otherwise**, write it as Markdown to `<repo>/.claude-marketplace-audits/REPORT-<timestamp>.md`, with the timestamp of this run's stems, and give the user its path. That file is not an audit output: it has no JSON and does not follow the naming of `AUDIT_OUTPUT_SPEC.md` Section 1.2.
 
 ## Related
 

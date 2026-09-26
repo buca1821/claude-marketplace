@@ -76,6 +76,17 @@ y la forma de aplicarlo están en la skill `audit-run-protocol`. No es
 una salida de auditoría: no tiene JSON asociado ni sigue el nombre de
 archivo de la sección 1.2.
 
+### 1.5 Informe legible (derivado)
+
+`/run-audits` termina escribiendo un informe para que lo lea una
+persona, construido a partir de los pares de la ejecución: una tabla
+por agente con la gravedad de cada hallazgo, qué pasa, a quién afecta,
+dónde está y qué hacer. Va a un conector de documentos cuando la sesión
+tiene uno; si no, se escribe como
+`.claude-marketplace-audits/REPORT-<timestamp UTC>.md`. Se deriva del
+JSON, que sigue siendo el registro canónico. No tiene JSON asociado ni
+sigue el nombre de archivo de la sección 1.2.
+
 ---
 
 ## 2. Reporte Markdown

@@ -72,6 +72,16 @@ are defined by the `audit-run-protocol` skill. It is not an audit
 output: it has no JSON counterpart and does not follow the naming in
 Section 1.2.
 
+### 1.5 Readable report (derived)
+
+`/run-audits` ends by writing one report for a person to read, built
+from the run's pairs: a table per agent with each finding's severity,
+what happens, who is affected, where and what to do. It goes to a
+document connector when the session has one; otherwise it is written as
+`.claude-marketplace-audits/REPORT-<UTC-timestamp>.md`. It is derived
+from the JSON, which stays the canonical record. It has no JSON
+counterpart and does not follow the naming in Section 1.2.
+
 ---
 
 ## 2. Markdown report
