@@ -18,8 +18,17 @@ event=$(python3 -c "import json,sys; d=json.loads(sys.argv[1]); print(d.get('hoo
 
 # Sanitize a string for use in an AppleScript string literal:
 # strips backslashes and double-quotes, truncates to 120 chars.
+# terminal-notifier reads -message through NSUserDefaults, which parses a value
+# starting with [ ( { < or ' as a property list and rejects it ("Could not read
+# the -message value"). A leading backslash keeps it a plain string, and
+# terminal-notifier drops that backslash before showing the message.
 sanitize() {
-  echo "$1" | tr -d '\\"' | cut -c1-120
+  local s
+  s=$(echo "$1" | tr -d '\\"' | cut -c1-120)
+  case "$s" in
+    "["* | "("* | "{"* | "<"* | "'"*) s="\\$s" ;;
+  esac
+  echo "$s"
 }
 
 case "$event" in
